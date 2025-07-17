@@ -32,6 +32,7 @@
     padding: 4px 8px;
     font-size: 12px;
     cursor: pointer;
+    z-index: 10;
   }
   .admin-toggle:hover { background: #2980b9; }
   .header {
@@ -73,7 +74,7 @@
     margin-bottom: 5px;
   }
   .admin-section button {
-    width: 30%;
+    width: 25%;
     padding: 6px;
     background: #3498db;
     color: white;
@@ -137,6 +138,12 @@
     padding: 8px 0 10px;
   }
   @media (max-width: 480px) {
+    .admin-toggle {
+      top: 5px;
+      right: 5px;
+      font-size: 10px;
+      padding: 3px 6px;
+    }
     .header h1 { font-size: 16px; }
     .header p { font-size: 10px; }
     .top-player img { width: 80px; height: 80px; }
