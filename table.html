@@ -147,15 +147,38 @@
     font-size: 13px;
   }
   .last-matches {
-    list-style: none;
-    padding: 0 10px;
-    margin: 0;
-    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
   }
-  .last-matches li {
-    padding: 4px 0;
-    border-bottom: 1px solid #eee;
+  .match-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    padding: 6px 10px;
+    font-size: 12px;
     color: #2c3e50;
+    transition: transform 0.2s;
+  }
+  .match-card:hover {
+    transform: translateY(-2px);
+  }
+  .match-team {
+    flex: 1;
+    text-align: center;
+    font-weight: 500;
+  }
+  .match-score {
+    background: #3498db;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-weight: bold;
+    min-width: 40px;
   }
   .footer {
     text-align: center;
@@ -235,7 +258,7 @@
   </table>
 
   <div class="description">⚽ Last 5 Match Results</div>
-  <ul id="lastMatches" class="last-matches"></ul>
+  <div class="last-matches" id="lastMatches"></div>
 
   <div class="footer">Updated Live | Built by Ezaz ⚽</div>
 </div>
@@ -244,8 +267,6 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 const SECRET_CODE = "29292929";
 const playerImages = {"Kakon":"https://i.imgur.com/XhONWgL.png"};
-
-// Start with first real match:
 const lastMatches = [ "Kakon 5 – 1 Shami" ];
 
 function toggleAdmin() {
@@ -292,10 +313,21 @@ async function loadTable() {
   }
 }
 function showLastMatches(){
-  const ul=document.getElementById("lastMatches");
-  ul.innerHTML="";
+  const container = document.getElementById("lastMatches");
+  container.innerHTML = "";
   lastMatches.slice(0,5).forEach(match=>{
-    ul.innerHTML+=`<li>${match}</li>`;
+    const parts = match.split(" ");
+    const teamA = parts[0];
+    const scoreA = parts[1];
+    const scoreB = parts[3];
+    const teamB = parts[4];
+    container.innerHTML += `
+      <div class="match-card">
+        <div class="match-team">${teamA}</div>
+        <div class="match-score">${scoreA} - ${scoreB}</div>
+        <div class="match-team">${teamB}</div>
+      </div>
+    `;
   });
 }
 async function addResult(){
