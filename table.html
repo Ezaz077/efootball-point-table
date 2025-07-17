@@ -1,81 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>⚽ E-Football League Table (Live)</title>
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 10px; margin: 0; }
-    .container { max-width: 500px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
-    .header { background: linear-gradient(90deg,#1e3c72,#2a5298); padding: 20px 10px 10px; color: #fff; text-align: center; }
-    .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
-    .header p { font-size: 12px; margin: 5px 0 0; }
-    .form-section { padding: 10px 15px; }
-    .form-section select, .form-section input { width: 48%; margin: 2px 1%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; }
-    .form-section button { width: 100%; padding: 6px; margin-top: 5px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 13px; cursor: pointer; }
-    .form-section button:hover { background: #2980b9; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    th, td { padding: 5px; border: 1px solid #ddd; text-align: center; }
-    th { background: #2c3e50; color: white; font-size: 13px; }
-    .footer { text-align: center; font-size: 10px; color: #777; padding: 5px 0 10px; }
-    .description { background: #eaf3fc; color: #2c3e50; padding: 8px; text-align: center; font-size: 12px; border-bottom: 1px solid #ccc; }
-  </style>
+<meta charset="UTF-8">
+<title>⚽ E-Football League Table (Live)</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 10px; margin: 0; }
+  .container { max-width: 500px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+  .header { background: linear-gradient(90deg,#1e3c72,#2a5298); padding: 20px 10px 10px; color: #fff; text-align: center; }
+  .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+  .header p { font-size: 12px; margin: 5px 0 0; }
+  .form-section { padding: 10px 15px; }
+  .form-section select, .form-section input { width: 48%; margin: 2px 1%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; }
+  .form-section button { width: 100%; padding: 6px; margin-top: 5px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 13px; cursor: pointer; }
+  .form-section button:hover { background: #2980b9; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { padding: 5px; border: 1px solid #ddd; text-align: center; }
+  th { background: #2c3e50; color: white; font-size: 13px; }
+  .footer { text-align: center; font-size: 10px; color: #777; padding: 5px 0 10px; }
+  .description { background: #eaf3fc; color: #2c3e50; padding: 8px; text-align: center; font-size: 12px; border-bottom: 1px solid #ccc; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🎮 E-Football Tournament 2025</h1>
-      <p>League Format | 6 Teams | Live & Shared</p>
-    </div>
-
-    <div class="form-section">
-      <select id="teamA">
-        <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
-        <option>Mafid</option><option>Kakon</option><option>Shami</option>
-      </select>
-      <input type="number" id="scoreA" placeholder="Goals A">
-      <select id="teamB">
-        <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
-        <option>Mafid</option><option>Kakon</option><option>Shami</option>
-      </select>
-      <input type="number" id="scoreB" placeholder="Goals B">
-      <button onclick="addResult()">➕ Add Result</button>
-    </div>
-
-    <div class="description">
-      🏆 Live league table powered by Google Sheets!
-    </div>
-    <table id="pointsTable">
-      <thead>
-        <tr>
-          <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
-          <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <div class="footer">Updated Live | Developed by Ezaz 💻</div>
+<div class="container">
+  <div class="header">
+    <h1>🎮 E-Football Tournament 2025</h1>
+    <p>Live & Shared Table | Powered by Google Sheets</p>
   </div>
 
+  <div class="form-section">
+    <select id="teamA">
+      <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
+      <option>Mafid</option><option>Kakon</option><option>Shami</option>
+    </select>
+    <input type="number" id="scoreA" placeholder="Goals A">
+    <select id="teamB">
+      <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
+      <option>Mafid</option><option>Kakon</option><option>Shami</option>
+    </select>
+    <input type="number" id="scoreB" placeholder="Goals B">
+    <button onclick="addResult()">➕ Add Result</button>
+  </div>
+
+  <div class="description">🏆 Live League Table Updated for Everyone!</div>
+  <table id="pointsTable">
+    <thead>
+      <tr>
+        <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
+        <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div class="footer">Updated Live | Built by Ezaz 💻</div>
+</div>
+
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxBQUAEtE81f_RGl20zys0jyiJ0hGPKywABAjPsqBGsPS6sczvBlNehXcSanMfdF5DHuA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 
 async function loadTable() {
-  try {
-    const res = await fetch(API_URL + "?method=getTable");
-    const data = await res.json();
-    const tbody = document.querySelector("#pointsTable tbody");
-    tbody.innerHTML = "";
-    for (let i = 1; i < data.length; i++) { // skip header
-      const row = data[i];
-      tbody.innerHTML += `<tr>
-        <td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>
-        <td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td>
-        <td>${row[6]}</td><td>${row[7]}</td><td>${row[8]}</td>
-      </tr>`;
-    }
-  } catch (e) {
-    console.error("Error loading table:", e);
-    alert("Failed to load table.");
+  const res = await fetch(API_URL + "?method=getTable");
+  const data = await res.json();
+  const tbody = document.querySelector("#pointsTable tbody");
+  tbody.innerHTML = "";
+  for (let i = 1; i < data.length; i++) { // skip header
+    const row = data[i];
+    tbody.innerHTML += `<tr>
+      <td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>
+      <td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td>
+      <td>${row[6]}</td><td>${row[7]}</td><td>${row[8]}</td>
+    </tr>`;
   }
 }
 
@@ -86,23 +79,20 @@ async function addResult() {
   const gB = parseInt(document.getElementById("scoreB").value);
   if (a === b || isNaN(gA) || isNaN(gB)) return alert("Invalid input!");
 
-  // Load current data to calculate stats
+  // Fetch current data
   const res = await fetch(API_URL + "?method=getTable");
   const data = await res.json();
   const teams = {};
   for (let i = 1; i < data.length; i++) {
     const r = data[i];
-    teams[r[0]] = { played:r[1], win:r[2], draw:r[3], loss:r[4], gf:r[5], ga:r[6], gd:r[7], pts:r[8] };
+    teams[r[0]] = { played:Number(r[1]), win:Number(r[2]), draw:Number(r[3]), loss:Number(r[4]), gf:Number(r[5]), ga:Number(r[6]), gd:Number(r[7]), pts:Number(r[8]) };
   }
 
-  // Update stats
   updateStats(teams[a], gA, gB);
   updateStats(teams[b], gB, gA);
 
-  // Send updates
   await updateTeam(a, teams[a]);
   await updateTeam(b, teams[b]);
-
   loadTable();
 }
 
@@ -122,9 +112,7 @@ async function updateTeam(name, s) {
     played: s.played, win: s.win, draw: s.draw, loss: s.loss,
     gf: s.gf, ga: s.ga, gd: s.gd, pts: s.pts
   });
-  const res = await fetch(API_URL + "?" + params.toString());
-  const txt = await res.text();
-  console.log(txt);
+  await fetch(API_URL + "?" + params.toString());
 }
 
 loadTable();
