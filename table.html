@@ -54,7 +54,7 @@
     border-radius: 50%;
     border: 4px solid gold;
     object-fit: cover;
-    animation: slowSpin 8s linear infinite;
+    animation: neonGlow 2s ease-in-out infinite alternate;
   }
   .top-player p {
     margin: 5px 0 0;
@@ -174,9 +174,13 @@
     0%, 100% { box-shadow: 0 0 5px #3498db; }
     50% { box-shadow: 0 0 12px #3498db; }
   }
-  @keyframes slowSpin {
-    from { transform: rotate(0deg);}
-    to { transform: rotate(360deg);}
+  @keyframes neonGlow {
+    from {
+      box-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold;
+    }
+    to {
+      box-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px gold;
+    }
   }
   @keyframes rowPulse {
     0%,100% { background-color: white; }
@@ -235,7 +239,6 @@
 </div>
 
 <script>
-// same JS as before
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 const SECRET_CODE = "29292929";
 
