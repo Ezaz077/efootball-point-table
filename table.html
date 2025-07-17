@@ -13,7 +13,6 @@
   }
   .container {
     max-width: 600px;
-    width: 100%;
     margin: auto;
     background: #fff;
     border-radius: 10px;
@@ -41,8 +40,18 @@
     padding: 20px 10px 10px;
     color: #fff;
     text-align: center;
+    position: relative;
   }
-  .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+  .header h1 {
+    margin: 0;
+    font-size: 20px;
+    text-transform: uppercase;
+  }
+  .header .football-icon {
+    display: inline-block;
+    margin-left: 5px;
+    animation: spin 3s linear infinite;
+  }
   .header p { font-size: 12px; margin: 5px 0 0; }
   .top-player {
     text-align: center;
@@ -60,6 +69,11 @@
     margin: 5px 0 0;
     font-weight: bold;
     color: #2c3e50;
+  }
+  .top-player .ball {
+    display: inline-block;
+    margin-left: 5px;
+    animation: bounce 1s infinite;
   }
   .admin-section {
     display: none;
@@ -162,29 +176,15 @@
     .form-section select, .form-section input { flex: 1 1 100%; }
     th, td { font-size: 11px; padding: 4px; }
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px);}
-    to { opacity: 1; transform: translateY(0);}
-  }
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 5px #3498db; }
-    50% { box-shadow: 0 0 12px #3498db; }
-  }
-  @keyframes neonGlow {
-    from {
-      box-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold;
-    }
-    to {
-      box-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px gold;
-    }
-  }
-  @keyframes rowPulse {
-    0%,100% { background-color: white; }
-    50% { background-color: #f9fcff; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes pulseGlow { 0%,100%{box-shadow:0 0 5px #3498db;} 50%{box-shadow:0 0 12px #3498db;} }
+  @keyframes neonGlow { from{box-shadow:0 0 5px gold,0 0 10px gold;} to{box-shadow:0 0 10px gold,0 0 20px gold;} }
+  @keyframes rowPulse { 0%,100%{background:white;} 50%{background:#f9fcff;} }
+  @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0);}
+    50% { transform: translateY(-4px);}
   }
 </style>
 </head>
@@ -193,7 +193,9 @@
   <button class="admin-toggle" onclick="toggleAdmin()">🔑 Admin</button>
 
   <div class="header">
-    <h1>🎮 E-Football Tournament 2025</h1>
+    <h1>🎮 E-Football Tournament 2025
+      <span class="football-icon">⚽</span>
+    </h1>
     <p>Live & Shared Table | Admin-protected</p>
   </div>
 
@@ -205,6 +207,7 @@
   <div class="top-player" id="topPlayer" style="display:none;">
     <img src="" alt="Top Player" id="topPlayerImg">
     <p id="topPlayerName"></p>
+    <span class="ball">⚽</span>
   </div>
 
   <div class="form-section" id="addForm">
@@ -235,23 +238,19 @@
     </thead>
     <tbody></tbody>
   </table>
-  <div class="footer">Updated Live | Built by Ezaz 💻</div>
+  <div class="footer">Updated Live | Built by Ezaz ⚽</div>
 </div>
 
 <script>
+// your existing JS (unchanged)
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 const SECRET_CODE = "29292929";
-
-const playerImages = {
-  "Kakon": "https://i.imgur.com/XhONWgL.png",
-  // add others later
-};
+const playerImages = {"Kakon":"https://i.imgur.com/XhONWgL.png"};
 
 function toggleAdmin() {
   const section = document.getElementById("adminSection");
   section.style.display = section.style.display === "block" ? "none" : "block";
 }
-
 function checkAdmin() {
   const input = document.getElementById("adminCode").value;
   if (input === SECRET_CODE) {
@@ -262,102 +261,63 @@ function checkAdmin() {
     alert("❌ Wrong code!");
   }
 }
-
 async function loadTable() {
   document.getElementById("loadingMessage").style.display = "block";
   document.getElementById("tableDescription").style.display = "none";
-
   try {
     const res = await fetch(API_URL + "?method=getTable");
     const data = await res.json();
     const tbody = document.querySelector("#pointsTable tbody");
     tbody.innerHTML = "";
-
     const teams = [];
-    for (let i = 1; i < data.length; i++) {
+    for (let i=1;i<data.length;i++) {
       const row = data[i];
       teams.push({
-        name: row[0],
-        played: Number(row[1]),
-        win: Number(row[2]),
-        draw: Number(row[3]),
-        loss: Number(row[4]),
-        gf: Number(row[5]),
-        ga: Number(row[6]),
-        gd: Number(row[7]),
-        pts: Number(row[8])
+        name: row[0], played:+row[1], win:+row[2], draw:+row[3],
+        loss:+row[4], gf:+row[5], ga:+row[6], gd:+row[7], pts:+row[8]
       });
     }
-
-    teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-
-    const top = teams[0];
-    if(top && playerImages[top.name]) {
-      document.getElementById("topPlayerImg").src = playerImages[top.name];
-      document.getElementById("topPlayerName").textContent = `🏆 Current Top Player: ${top.name}`;
-      document.getElementById("topPlayer").style.display = "block";
+    teams.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+    const top=teams[0];
+    if(top && playerImages[top.name]){
+      document.getElementById("topPlayerImg").src=playerImages[top.name];
+      document.getElementById("topPlayerName").textContent=`🏆 Current Top Player: ${top.name}`;
+      document.getElementById("topPlayer").style.display="block";
     } else {
-      document.getElementById("topPlayer").style.display = "none";
+      document.getElementById("topPlayer").style.display="none";
     }
-
-    for (const t of teams) {
-      tbody.innerHTML += `<tr>
-        <td>${t.name}</td><td>${t.played}</td><td>${t.win}</td>
-        <td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td>
-        <td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td>
-      </tr>`;
+    for(const t of teams){
+      tbody.innerHTML+=`<tr><td>${t.name}</td><td>${t.played}</td><td>${t.win}</td>
+      <td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td>
+      <td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td></tr>`;
     }
-
-    document.getElementById("loadingMessage").style.display = "none";
-    document.getElementById("tableDescription").style.display = "block";
-  } catch (e) {
-    document.getElementById("loadingMessage").textContent = "❌ Failed to load table.";
-    console.error(e);
+    document.getElementById("loadingMessage").style.display="none";
+    document.getElementById("tableDescription").style.display="block";
+  } catch(e){console.error(e);
+    document.getElementById("loadingMessage").textContent="❌ Failed to load table.";
   }
 }
-
 async function addResult() {
-  const a = document.getElementById("teamA").value;
-  const b = document.getElementById("teamB").value;
-  const gA = parseInt(document.getElementById("scoreA").value);
-  const gB = parseInt(document.getElementById("scoreB").value);
-  if (a === b || isNaN(gA) || isNaN(gB)) return alert("Invalid input!");
-
-  const res = await fetch(API_URL + "?method=getTable");
-  const data = await res.json();
-  const teams = {};
-  for (let i = 1; i < data.length; i++) {
-    const r = data[i];
-    teams[r[0]] = { played:Number(r[1]), win:Number(r[2]), draw:Number(r[3]), loss:Number(r[4]), gf:Number(r[5]), ga:Number(r[6]), gd:Number(r[7]), pts:Number(r[8]) };
+  const a=document.getElementById("teamA").value,b=document.getElementById("teamB").value;
+  const gA=+document.getElementById("scoreA").value,gB=+document.getElementById("scoreB").value;
+  if(a===b||isNaN(gA)||isNaN(gB)) return alert("Invalid input!");
+  const res=await fetch(API_URL+"?method=getTable");
+  const data=await res.json(),teams={};
+  for(let i=1;i<data.length;i++){
+    const r=data[i];
+    teams[r[0]]={played:+r[1],win:+r[2],draw:+r[3],loss:+r[4],gf:+r[5],ga:+r[6],gd:+r[7],pts:+r[8]};
   }
-
-  updateStats(teams[a], gA, gB);
-  updateStats(teams[b], gB, gA);
-
-  await updateTeam(a, teams[a]);
-  await updateTeam(b, teams[b]);
+  updateStats(teams[a],gA,gB); updateStats(teams[b],gB,gA);
+  await updateTeam(a,teams[a]); await updateTeam(b,teams[b]);
   loadTable();
 }
-
-function updateStats(t, gf, ga) {
-  t.played++;
-  t.gf += gf;
-  t.ga += ga;
-  t.gd = t.gf - t.ga;
-  if (gf > ga) { t.win++; t.pts += 3; }
-  else if (gf === ga) { t.draw++; t.pts += 1; }
-  else { t.loss++; }
+function updateStats(t,gf,ga){t.played++;t.gf+=gf;t.ga+=ga;t.gd=t.gf-t.ga;
+  if(gf>ga){t.win++;t.pts+=3;} else if(gf===ga){t.draw++;t.pts+=1;} else{t.loss++;}
 }
-
-async function updateTeam(name, s) {
-  const params = new URLSearchParams({
-    method: "updateTeam", teamName: name,
-    played: s.played, win: s.win, draw: s.draw, loss: s.loss,
-    gf: s.gf, ga: s.ga, gd: s.gd, pts: s.pts
-  });
-  await fetch(API_URL + "?" + params.toString());
+async function updateTeam(name,s){
+  const p=new URLSearchParams({method:"updateTeam",teamName:name,played:s.played,win:s.win,draw:s.draw,loss:s.loss,gf:s.gf,ga:s.ga,gd:s.gd,pts:s.pts});
+  await fetch(API_URL+"?"+p);
 }
-
 loadTable();
 </script>
 </body>
