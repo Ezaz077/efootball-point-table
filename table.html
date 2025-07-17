@@ -9,10 +9,10 @@
   .header { background: linear-gradient(90deg,#1e3c72,#2a5298); padding: 20px 10px 10px; color: #fff; text-align: center; }
   .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
   .header p { font-size: 12px; margin: 5px 0 0; }
-  .form-section { padding: 10px 15px; }
-  .form-section select, .form-section input { width: 48%; margin: 2px 1%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; }
-  .form-section button { width: 100%; padding: 6px; margin-top: 5px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 13px; cursor: pointer; }
-  .form-section button:hover { background: #2980b9; }
+  .form-section, .admin-section { padding: 10px 15px; }
+  .form-section select, .form-section input, .admin-section input { width: 48%; margin: 2px 1%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; }
+  .form-section button, .admin-section button { width: 100%; padding: 6px; margin-top: 5px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 13px; cursor: pointer; }
+  .form-section button:hover, .admin-section button:hover { background: #2980b9; }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
   th, td { padding: 5px; border: 1px solid #ddd; text-align: center; }
   th { background: #2c3e50; color: white; font-size: 13px; }
@@ -24,10 +24,15 @@
 <div class="container">
   <div class="header">
     <h1>🎮 E-Football Tournament 2025</h1>
-    <p>Live & Shared Table | Powered by Google Sheets</p>
+    <p>Live & Shared Table | Admin-protected</p>
   </div>
 
-  <div class="form-section">
+  <div class="admin-section">
+    <input type="password" id="adminCode" placeholder="Enter admin code">
+    <button onclick="checkAdmin()">🔑 Login as Admin</button>
+  </div>
+
+  <div class="form-section" id="addForm" style="display:none;">
     <select id="teamA">
       <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
       <option>Mafid</option><option>Kakon</option><option>Shami</option>
@@ -56,6 +61,7 @@
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
+const SECRET_CODE = "29292929";
 
 async function loadTable() {
   const res = await fetch(API_URL + "?method=getTable");
@@ -80,11 +86,7 @@ async function loadTable() {
   }
 
   // Sort: by points, then GD, then GF
-  teams.sort((a, b) => 
-    b.pts - a.pts ||
-    b.gd - a.gd ||
-    b.gf - a.gf
-  );
+  teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
 
   for (const t of teams) {
     tbody.innerHTML += `<tr>
@@ -102,7 +104,6 @@ async function addResult() {
   const gB = parseInt(document.getElementById("scoreB").value);
   if (a === b || isNaN(gA) || isNaN(gB)) return alert("Invalid input!");
 
-  // Load current data
   const res = await fetch(API_URL + "?method=getTable");
   const data = await res.json();
   const teams = {};
@@ -136,6 +137,16 @@ async function updateTeam(name, s) {
     gf: s.gf, ga: s.ga, gd: s.gd, pts: s.pts
   });
   await fetch(API_URL + "?" + params.toString());
+}
+
+function checkAdmin() {
+  const input = document.getElementById("adminCode").value;
+  if (input === SECRET_CODE) {
+    document.getElementById("addForm").style.display = "block";
+    alert("✅ Admin mode enabled!");
+  } else {
+    alert("❌ Wrong code!");
+  }
 }
 
 loadTable();
