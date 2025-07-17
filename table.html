@@ -40,18 +40,8 @@
     padding: 20px 10px 10px;
     color: #fff;
     text-align: center;
-    position: relative;
   }
-  .header h1 {
-    margin: 0;
-    font-size: 20px;
-    text-transform: uppercase;
-  }
-  .header .football-icon {
-    display: inline-block;
-    margin-left: 5px;
-    animation: spin 3s linear infinite;
-  }
+  .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
   .header p { font-size: 12px; margin: 5px 0 0; }
   .top-player {
     text-align: center;
@@ -156,6 +146,17 @@
     color: white;
     font-size: 13px;
   }
+  .last-matches {
+    list-style: none;
+    padding: 0 10px;
+    margin: 0;
+    font-size: 12px;
+  }
+  .last-matches li {
+    padding: 4px 0;
+    border-bottom: 1px solid #eee;
+    color: #2c3e50;
+  }
   .footer {
     text-align: center;
     font-size: 10px;
@@ -181,21 +182,15 @@
   @keyframes pulseGlow { 0%,100%{box-shadow:0 0 5px #3498db;} 50%{box-shadow:0 0 12px #3498db;} }
   @keyframes neonGlow { from{box-shadow:0 0 5px gold,0 0 10px gold;} to{box-shadow:0 0 10px gold,0 0 20px gold;} }
   @keyframes rowPulse { 0%,100%{background:white;} 50%{background:#f9fcff;} }
-  @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0);}
-    50% { transform: translateY(-4px);}
-  }
+  @keyframes bounce { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-4px);} }
 </style>
 </head>
 <body>
 <div class="container">
-  <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
+  <button class="admin-toggle" onclick="toggleAdmin()">🔑 Admin</button>
 
   <div class="header">
-    <h1>🎮 E-Football Tournament 2025
-      <span class="football-icon">⚽</span>
-    </h1>
+    <h1>🎮 E-Football Tournament 2025</h1>
     <p>Live & Shared Table | Admin-protected</p>
   </div>
 
@@ -238,14 +233,20 @@
     </thead>
     <tbody></tbody>
   </table>
+
+  <div class="description">⚽ Last 5 Match Results</div>
+  <ul id="lastMatches" class="last-matches"></ul>
+
   <div class="footer">Updated Live | Built by Ezaz ⚽</div>
 </div>
 
 <script>
-// your existing JS (unchanged)
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 const SECRET_CODE = "29292929";
 const playerImages = {"Kakon":"https://i.imgur.com/XhONWgL.png"};
+
+// Start with first real match:
+const lastMatches = [ "Kakon 5 – 1 Shami" ];
 
 function toggleAdmin() {
   const section = document.getElementById("adminSection");
@@ -257,25 +258,20 @@ function checkAdmin() {
     document.getElementById("addForm").style.display = "flex";
     document.getElementById("adminSection").style.display = "none";
     alert("✅ Admin mode enabled!");
-  } else {
-    alert("❌ Wrong code!");
-  }
+  } else { alert("❌ Wrong code!"); }
 }
 async function loadTable() {
-  document.getElementById("loadingMessage").style.display = "block";
-  document.getElementById("tableDescription").style.display = "none";
+  document.getElementById("loadingMessage").style.display="block";
+  document.getElementById("tableDescription").style.display="none";
   try {
-    const res = await fetch(API_URL + "?method=getTable");
+    const res = await fetch(API_URL+"?method=getTable");
     const data = await res.json();
     const tbody = document.querySelector("#pointsTable tbody");
-    tbody.innerHTML = "";
-    const teams = [];
-    for (let i=1;i<data.length;i++) {
-      const row = data[i];
-      teams.push({
-        name: row[0], played:+row[1], win:+row[2], draw:+row[3],
-        loss:+row[4], gf:+row[5], ga:+row[6], gd:+row[7], pts:+row[8]
-      });
+    tbody.innerHTML="";
+    const teams=[];
+    for(let i=1;i<data.length;i++){
+      const r=data[i];
+      teams.push({name:r[0],played:+r[1],win:+r[2],draw:+r[3],loss:+r[4],gf:+r[5],ga:+r[6],gd:+r[7],pts:+r[8]});
     }
     teams.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
     const top=teams[0];
@@ -287,9 +283,7 @@ async function loadTable() {
       document.getElementById("topPlayer").style.display="none";
     }
     for(const t of teams){
-      tbody.innerHTML+=`<tr><td>${t.name}</td><td>${t.played}</td><td>${t.win}</td>
-      <td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td>
-      <td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td></tr>`;
+      tbody.innerHTML+=`<tr><td>${t.name}</td><td>${t.played}</td><td>${t.win}</td><td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td></tr>`;
     }
     document.getElementById("loadingMessage").style.display="none";
     document.getElementById("tableDescription").style.display="block";
@@ -297,10 +291,18 @@ async function loadTable() {
     document.getElementById("loadingMessage").textContent="❌ Failed to load table.";
   }
 }
-async function addResult() {
+function showLastMatches(){
+  const ul=document.getElementById("lastMatches");
+  ul.innerHTML="";
+  lastMatches.slice(0,5).forEach(match=>{
+    ul.innerHTML+=`<li>${match}</li>`;
+  });
+}
+async function addResult(){
   const a=document.getElementById("teamA").value,b=document.getElementById("teamB").value;
   const gA=+document.getElementById("scoreA").value,gB=+document.getElementById("scoreB").value;
   if(a===b||isNaN(gA)||isNaN(gB)) return alert("Invalid input!");
+  lastMatches.unshift(`${a} ${gA} – ${gB} ${b}`);
   const res=await fetch(API_URL+"?method=getTable");
   const data=await res.json(),teams={};
   for(let i=1;i<data.length;i++){
@@ -309,7 +311,7 @@ async function addResult() {
   }
   updateStats(teams[a],gA,gB); updateStats(teams[b],gB,gA);
   await updateTeam(a,teams[a]); await updateTeam(b,teams[b]);
-  loadTable();
+  loadTable(); showLastMatches();
 }
 function updateStats(t,gf,ga){t.played++;t.gf+=gf;t.ga+=ga;t.gd=t.gf-t.ga;
   if(gf>ga){t.win++;t.pts+=3;} else if(gf===ga){t.draw++;t.pts+=1;} else{t.loss++;}
@@ -318,7 +320,7 @@ async function updateTeam(name,s){
   const p=new URLSearchParams({method:"updateTeam",teamName:name,played:s.played,win:s.win,draw:s.draw,loss:s.loss,gf:s.gf,ga:s.ga,gd:s.gd,pts:s.pts});
   await fetch(API_URL+"?"+p);
 }
-loadTable();
+loadTable(); showLastMatches();
 </script>
 </body>
 </html>
