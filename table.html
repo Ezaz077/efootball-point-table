@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⚽ E-Football League Table</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      padding: 10px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #1e3c72, #2a5298);
+      padding: 20px 10px 10px 10px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    .header p {
+      font-size: 12px;
+      margin: 5px 0 0;
+    }
+
+    .form-section {
+      padding: 10px 15px;
+    }
+
+    .form-section select, .form-section input {
+      width: 48%;
+      margin: 2px 1%;
+      padding: 5px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-section button {
+      width: 100%;
+      padding: 6px;
+      margin-top: 5px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background: #2980b9;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+    }
+
+    .btn-group button {
+      flex: 1;
+      margin: 0 3px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      padding: 6px;
+      font-size: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-group button:nth-child(2) {
+      background-color: #f39c12;
+    }
+
+    .btn-group button:nth-child(3) {
+      background-color: #e74c3c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin: 0;
+    }
+
+    th, td {
+      padding: 5px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: #2c3e50;
+      color: white;
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 10px;
+      color: #777;
+      padding: 5px 0 10px;
+    }
+
+    .screenshot-area {
+      padding: 0 15px 10px;
+    }
+
+    .description {
+      background: #eaf3fc;
+      color: #2c3e50;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      border-bottom: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header" id="header-banner">
+      <h1>🎮 E-Football Tournament 2025</h1>
+      <p>League Format | 6 Teams | Fair Play & Competition</p>
+    </div>
+
+    <div class="form-section">
+      <select id="teamA">
+        <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
+        <option>Mafid</option><option>Kakon</option><option>Shami</option>
+      </select>
+      <input type="number" id="scoreA" placeholder="Goals A">
+      <select id="teamB">
+        <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
+        <option>Mafid</option><option>Kakon</option><option>Shami</option>
+      </select>
+      <input type="number" id="scoreB" placeholder="Goals B">
+      <button onclick="addResult()">➕ Add Result</button>
+    </div>
+
+    <div class="btn-group">
+      <button onclick="saveAsImage()">📸 Save Image</button>
+      <button onclick="downloadCSV()">📁 Export CSV</button>
+      <button onclick="resetTable()">♻️ Reset</button>
+    </div>
+
+    <div class="screenshot-area" id="screenshot">
+      <div class="description">
+        🏆 Welcome to the Ultimate E-Football League! Teams battle head-to-head in a league system to prove who's the best. May the best controller win!
+      </div>
+      <table id="pointsTable">
+        <thead>
+          <tr>
+            <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
+            <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="footer">Developed by Ezaz 💻 | Updated Automatically</div>
+    </div>
+  </div>
+
+  <script>
+    let teams = {
+      Ezaz: {}, Surjo: {}, Uchas: {}, Mafid: {}, Kakon: {}, Shami: {}
+    };
+    const defaultStats = () => ({ played:0, win:0, draw:0, loss:0, gf:0, ga:0, pts:0 });
+
+    function init() {
+      const saved = localStorage.getItem("pointTable");
+      if (saved) teams = JSON.parse(saved);
+      else for (let t in teams) teams[t] = defaultStats();
+      updateTable();
+    }
+
+    function addResult() {
+      const a = document.getElementById("teamA").value;
+      const b = document.getElementById("teamB").value;
+      const gA = parseInt(document.getElementById("scoreA").value);
+      const gB = parseInt(document.getElementById("scoreB").value);
+      if (a === b || isNaN(gA) || isNaN(gB)) return alert("Invalid Input");
+
+      updateStats(a, gA, gB);
+      updateStats(b, gB, gA);
+      saveData(); updateTable();
+    }
+
+    function updateStats(name, gf, ga) {
+      const t = teams[name];
+      t.played++; t.gf += gf; t.ga += ga;
+      if (gf > ga) { t.win++; t.pts += 3; }
+      else if (gf === ga) { t.draw++; t.pts += 1; }
+      else { t.loss++; }
+    }
+
+    function updateTable() {
+      const tbody = document.querySelector("#pointsTable tbody");
+      tbody.innerHTML = "";
+      const sorted = Object.entries(teams).sort((a, b) => b[1].pts - a[1].pts || (b[1].gf - b[1].ga) - (a[1].gf - a[1].ga));
+      for (const [name, stat] of sorted) {
+        tbody.innerHTML += `<tr>
+          <td>${name}</td><td>${stat.played}</td><td>${stat.win}</td>
+          <td>${stat.draw}</td><td>${stat.loss}</td><td>${stat.gf}</td>
+          <td>${stat.ga}</td><td>${stat.gf - stat.ga}</td><td>${stat.pts}</td>
+        </tr>`;
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem("pointTable", JSON.stringify(teams));
+    }
+
+    function resetTable() {
+      if (confirm("Reset all data?")) {
+        for (let t in teams) teams[t] = defaultStats();
+        localStorage.removeItem("pointTable");
+        updateTable();
+      }
+    }
+
+    function downloadCSV() {
+      let csv = "Team,Played,Win,Draw,Loss,GF,GA,GD,Points\n";
+      for (let [n, s] of Object.entries(teams)) {
+        csv += `${n},${s.played},${s.win},${s.draw},${s.loss},${s.gf},${s.ga},${s.gf - s.ga},${s.pts}\n`;
+      }
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", "Efootball_Point_Table.csv");
+      link.click();
+    }
+
+    function saveAsImage() {
+      const screenshotElement = document.getElementById("screenshot");
+      html2canvas(screenshotElement, { scale: 2 }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "Efootball_Table.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
