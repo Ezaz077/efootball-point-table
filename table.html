@@ -19,7 +19,21 @@
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     overflow: hidden;
+    position: relative;
   }
+  .admin-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .admin-toggle:hover { background: #2980b9; }
   .header {
     background: linear-gradient(90deg,#1e3c72,#2a5298);
     padding: 20px 10px 10px;
@@ -44,20 +58,45 @@
     font-weight: bold;
     color: #2c3e50;
   }
-  .admin-section, .form-section {
+  .admin-section {
+    display: none;
     padding: 10px;
-    display: flex;
+    background: #eef6fc;
+    text-align: center;
+  }
+  .admin-section input {
+    width: 70%;
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
+  .admin-section button {
+    width: 30%;
+    padding: 6px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .admin-section button:hover { background: #2980b9; }
+  .form-section {
+    padding: 10px;
+    display: none;
     flex-wrap: wrap;
     gap: 5px;
   }
-  .admin-section input, .form-section select, .form-section input {
+  .form-section select, .form-section input {
     flex: 1 1 48%;
     padding: 6px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  .admin-section button, .form-section button {
+  .form-section button {
     width: 100%;
     padding: 8px;
     background: #3498db;
@@ -67,7 +106,7 @@
     font-size: 14px;
     cursor: pointer;
   }
-  .admin-section button:hover, .form-section button:hover { background: #2980b9; }
+  .form-section button:hover { background: #2980b9; }
   .description {
     background: #eaf3fc;
     color: #2c3e50;
@@ -100,17 +139,24 @@
   @media (max-width: 480px) {
     .header h1 { font-size: 16px; }
     .header p { font-size: 10px; }
-    .admin-section input, .form-section select, .form-section input { flex: 1 1 100%; }
-    th, td { font-size: 11px; padding: 4px; }
     .top-player img { width: 80px; height: 80px; }
+    .form-section select, .form-section input { flex: 1 1 100%; }
+    th, td { font-size: 11px; padding: 4px; }
   }
 </style>
 </head>
 <body>
 <div class="container">
+  <button class="admin-toggle" onclick="toggleAdmin()">🔑 Admin</button>
+
   <div class="header">
     <h1>🎮 E-Football Tournament 2025</h1>
     <p>Live & Shared Table | Admin-protected</p>
+  </div>
+
+  <div class="admin-section" id="adminSection">
+    <input type="password" id="adminCode" placeholder="Enter admin code">
+    <button onclick="checkAdmin()">OK</button>
   </div>
 
   <div class="top-player" id="topPlayer" style="display:none;">
@@ -118,12 +164,7 @@
     <p id="topPlayerName"></p>
   </div>
 
-  <div class="admin-section">
-    <input type="password" id="adminCode" placeholder="Enter admin code">
-    <button onclick="checkAdmin()">🔑 Login as Admin</button>
-  </div>
-
-  <div class="form-section" id="addForm" style="display:none;">
+  <div class="form-section" id="addForm">
     <select id="teamA">
       <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
       <option>Mafid</option><option>Kakon</option><option>Shami</option>
@@ -158,11 +199,26 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 const SECRET_CODE = "29292929";
 
-// Add your images here
 const playerImages = {
   "Kakon": "https://i.imgur.com/XhONWgL.png",
-  // Add more: "Ezaz": "URL", "Surjo": "URL", etc.
+  // add others later
 };
+
+function toggleAdmin() {
+  const section = document.getElementById("adminSection");
+  section.style.display = section.style.display === "block" ? "none" : "block";
+}
+
+function checkAdmin() {
+  const input = document.getElementById("adminCode").value;
+  if (input === SECRET_CODE) {
+    document.getElementById("addForm").style.display = "flex";
+    document.getElementById("adminSection").style.display = "none";
+    alert("✅ Admin mode enabled!");
+  } else {
+    alert("❌ Wrong code!");
+  }
+}
 
 async function loadTable() {
   document.getElementById("loadingMessage").style.display = "block";
@@ -192,7 +248,6 @@ async function loadTable() {
 
     teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
 
-    // Update top player section
     const top = teams[0];
     if(top && playerImages[top.name]) {
       document.getElementById("topPlayerImg").src = playerImages[top.name];
@@ -258,16 +313,6 @@ async function updateTeam(name, s) {
     gf: s.gf, ga: s.ga, gd: s.gd, pts: s.pts
   });
   await fetch(API_URL + "?" + params.toString());
-}
-
-function checkAdmin() {
-  const input = document.getElementById("adminCode").value;
-  if (input === SECRET_CODE) {
-    document.getElementById("addForm").style.display = "flex";
-    alert("✅ Admin mode enabled!");
-  } else {
-    alert("❌ Wrong code!");
-  }
 }
 
 loadTable();
