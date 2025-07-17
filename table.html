@@ -12,7 +12,7 @@
     padding: 10px;
   }
   .container {
-    max-width: 100%;
+    max-width: 600px;
     width: 100%;
     margin: auto;
     background: #fff;
@@ -28,6 +28,22 @@
   }
   .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
   .header p { font-size: 12px; margin: 5px 0 0; }
+  .top-player {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .top-player img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid gold;
+    object-fit: cover;
+  }
+  .top-player p {
+    margin: 5px 0 0;
+    font-weight: bold;
+    color: #2c3e50;
+  }
   .admin-section, .form-section {
     padding: 10px;
     display: flex;
@@ -81,12 +97,12 @@
     color: #777;
     padding: 8px 0 10px;
   }
-
   @media (max-width: 480px) {
     .header h1 { font-size: 16px; }
     .header p { font-size: 10px; }
     .admin-section input, .form-section select, .form-section input { flex: 1 1 100%; }
     th, td { font-size: 11px; padding: 4px; }
+    .top-player img { width: 80px; height: 80px; }
   }
 </style>
 </head>
@@ -95,6 +111,11 @@
   <div class="header">
     <h1>🎮 E-Football Tournament 2025</h1>
     <p>Live & Shared Table | Admin-protected</p>
+  </div>
+
+  <div class="top-player" id="topPlayer" style="display:none;">
+    <img src="" alt="Top Player" id="topPlayerImg">
+    <p id="topPlayerName"></p>
   </div>
 
   <div class="admin-section">
@@ -116,7 +137,11 @@
     <button onclick="addResult()">➕ Add Result</button>
   </div>
 
-  <div class="description">🏆 Live League Table Updated for Everyone!</div>
+  <div class="description" id="loadingMessage">⏳ Loading table, please wait...</div>
+  <div class="description" id="tableDescription" style="display:none;">
+    🏆 Live League Table Updated for Everyone!
+  </div>
+
   <table id="pointsTable">
     <thead>
       <tr>
@@ -133,36 +158,63 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
 const SECRET_CODE = "29292929";
 
+// Add your images here
+const playerImages = {
+  "Kakon": "https://i.imgur.com/XhONWgL.png",
+  // Add more: "Ezaz": "URL", "Surjo": "URL", etc.
+};
+
 async function loadTable() {
-  const res = await fetch(API_URL + "?method=getTable");
-  const data = await res.json();
-  const tbody = document.querySelector("#pointsTable tbody");
-  tbody.innerHTML = "";
+  document.getElementById("loadingMessage").style.display = "block";
+  document.getElementById("tableDescription").style.display = "none";
 
-  const teams = [];
-  for (let i = 1; i < data.length; i++) {
-    const row = data[i];
-    teams.push({
-      name: row[0],
-      played: Number(row[1]),
-      win: Number(row[2]),
-      draw: Number(row[3]),
-      loss: Number(row[4]),
-      gf: Number(row[5]),
-      ga: Number(row[6]),
-      gd: Number(row[7]),
-      pts: Number(row[8])
-    });
-  }
+  try {
+    const res = await fetch(API_URL + "?method=getTable");
+    const data = await res.json();
+    const tbody = document.querySelector("#pointsTable tbody");
+    tbody.innerHTML = "";
 
-  teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+    const teams = [];
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      teams.push({
+        name: row[0],
+        played: Number(row[1]),
+        win: Number(row[2]),
+        draw: Number(row[3]),
+        loss: Number(row[4]),
+        gf: Number(row[5]),
+        ga: Number(row[6]),
+        gd: Number(row[7]),
+        pts: Number(row[8])
+      });
+    }
 
-  for (const t of teams) {
-    tbody.innerHTML += `<tr>
-      <td>${t.name}</td><td>${t.played}</td><td>${t.win}</td>
-      <td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td>
-      <td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td>
-    </tr>`;
+    teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+
+    // Update top player section
+    const top = teams[0];
+    if(top && playerImages[top.name]) {
+      document.getElementById("topPlayerImg").src = playerImages[top.name];
+      document.getElementById("topPlayerName").textContent = `🏆 Current Top Player: ${top.name}`;
+      document.getElementById("topPlayer").style.display = "block";
+    } else {
+      document.getElementById("topPlayer").style.display = "none";
+    }
+
+    for (const t of teams) {
+      tbody.innerHTML += `<tr>
+        <td>${t.name}</td><td>${t.played}</td><td>${t.win}</td>
+        <td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td>
+        <td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td>
+      </tr>`;
+    }
+
+    document.getElementById("loadingMessage").style.display = "none";
+    document.getElementById("tableDescription").style.display = "block";
+  } catch (e) {
+    document.getElementById("loadingMessage").textContent = "❌ Failed to load table.";
+    console.error(e);
   }
 }
 
