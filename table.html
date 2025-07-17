@@ -62,12 +62,35 @@ async function loadTable() {
   const data = await res.json();
   const tbody = document.querySelector("#pointsTable tbody");
   tbody.innerHTML = "";
+
+  const teams = [];
   for (let i = 1; i < data.length; i++) { // skip header
     const row = data[i];
+    teams.push({
+      name: row[0],
+      played: Number(row[1]),
+      win: Number(row[2]),
+      draw: Number(row[3]),
+      loss: Number(row[4]),
+      gf: Number(row[5]),
+      ga: Number(row[6]),
+      gd: Number(row[7]),
+      pts: Number(row[8])
+    });
+  }
+
+  // Sort: by points, then GD, then GF
+  teams.sort((a, b) => 
+    b.pts - a.pts ||
+    b.gd - a.gd ||
+    b.gf - a.gf
+  );
+
+  for (const t of teams) {
     tbody.innerHTML += `<tr>
-      <td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>
-      <td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td>
-      <td>${row[6]}</td><td>${row[7]}</td><td>${row[8]}</td>
+      <td>${t.name}</td><td>${t.played}</td><td>${t.win}</td>
+      <td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td>
+      <td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td>
     </tr>`;
   }
 }
@@ -79,7 +102,7 @@ async function addResult() {
   const gB = parseInt(document.getElementById("scoreB").value);
   if (a === b || isNaN(gA) || isNaN(gB)) return alert("Invalid input!");
 
-  // Fetch current data
+  // Load current data
   const res = await fetch(API_URL + "?method=getTable");
   const data = await res.json();
   const teams = {};
