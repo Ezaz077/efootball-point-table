@@ -1,259 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Football Tournament</title>
+  <meta charset="UTF-8" />
+  <title>⚽ E-Football Points Table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
+      background: #f0f2f5;
       font-family: Arial, sans-serif;
-      max-width: 1200px;
-      margin: 0 auto;
+      margin: 0;
       padding: 20px;
-      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
       color: #333;
     }
-
-    h1, h2 {
-      color: #2c3e50;
+    .group-section {
+      margin: 20px auto;
+      max-width: 900px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .group-section h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      color: #444;
     }
-
-    .group-tables {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      overflow: hidden;
+      margin-top: 10px;
     }
-
     th, td {
-      padding: 12px;
+      padding: 10px;
+      border: 1px solid #ccc;
       text-align: center;
-      border-bottom: 1px solid #ddd;
     }
-
     th {
-      background-color: #3498db;
+      background: #007bff;
       color: white;
-      font-weight: bold;
     }
-
     tr:nth-child(even) {
       background-color: #f9f9f9;
     }
-
-    .admin-panel, .fixtures {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .admin-panel form {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    select, input {
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-
-    button {
+    .refresh {
+      display: block;
+      margin: 10px auto;
       padding: 10px 20px;
-      background-color: #3498db;
+      background: #28a745;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 16px;
     }
-
-    button:hover {
-      background-color: #2980b9;
-    }
-
-    .message {
-      margin-top: 10px;
-      text-align: center;
-      color: #e74c3c;
-    }
-
-    @media (max-width: 600px) {
-      .group-tables {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-panel form {
-        flex-direction: column;
-      }
+    .refresh:hover {
+      background: #218838;
     }
   </style>
 </head>
 <body>
-  <h1>E-Football Tournament</h1>
+  <h1>🏆 E-Football Tournament Points Table</h1>
+  <button class="refresh" onclick="fetchPoints()">🔄 Refresh</button>
 
-  <div class="group-tables" id="pointsTables"></div>
-
-  <div class="fixtures">
-    <h2>Fixtures Schedule</h2>
-    <p>Upcoming matches:</p>
-    <ul id="fixturesList">
-      <!-- Fixtures will be populated here -->
-    </ul>
-  </div>
-
-  <div class="admin-panel">
-    <h2>Admin Panel</h2>
-    <form id="resultForm">
-      <select id="teamA" required></select>
-      <input type="number" id="scoreA" min="0" required>
-      <span>vs</span>
-      <input type="number" id="scoreB" min="0" required>
-      <select id="teamB" required></select>
-      <button type="submit">Submit Result</button>
-    </form>
-    <div id="message" class="message"></div>
-  </div>
+  <div id="pointsContainer"></div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec';
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
 
-    // Fetch and display points tables
-    async function loadPointsTables() {
-      try {
-        const response = await fetch(`${API_URL}/points`);
-        const groups = await response.json();
-        if (groups.error) throw new Error(groups.error);
-        
-        const tablesDiv = document.getElement fio('pointsTables');
-        tablesDiv.innerHTML = '';
-        
-        for (const group in groups) {
-          const table = document.createElement('table');
-          table.innerHTML = `
-            <tr>
-              <th colspan="6">Group ${group}</th>
-            </tr>
-            <tr>
-              <th>Team</th>
-              <th>P</th>
-              <th>W</th>
-              <th>D</th>
-              <th>L</th>
-              <th>Pts</th>
-            </tr>
-          `;
-          groups[group].forEach(team => {
-            table.innerHTML += `
-              <tr>
-                <td>${team.team}</td>
-                <td>${team.played}</td>
-                <td>${team.won}</td>
-                <td>${team.draw}</td>
-                <td>${team.lost}</td>
-                <td>${team.points}</td>
-              </tr>
-            `;
-          });
-          tablesDiv.appendChild(table);
-        }
-      } catch (error) {
-        showMessage(`Error loading points: ${error.message}`);
-      }
-    }
+    function createTable(groupName, teams) {
+      const table = document.createElement("table");
 
-    // Populate team selectors
-    async function loadTeams() {
-      try {
-        const response = await fetch(`${API_URL}/points`);
-        const groups = await response.json();
-        const teamASelect = document.getElementById('teamA');
-        const teamBSelect = document.getElementById('teamB');
-        teamASelect.innerHTML = '<option value="">Select Team A</option>';
-        teamBSelect.innerHTML = '<option value="">Select Team B</option>';
-        
-        for (const group in groups) {
-          groups[group].forEach(team => {
-            const option = `<option value="${team.team}">${team.team}</option>`;
-            teamASelect.innerHTML += option;
-            teamBSelect.innerHTML += option;
-          });
-        }
-      } catch (error) {
-        showMessage(`Error loading teams: ${error.message}`);
-      }
-    }
+      const headers = ["Team", "P", "W", "D", "L", "GF", "GA", "GD", "Pts"];
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
 
-    // Display message
-    function showMessage(text, isSuccess = false) {
-      const messageDiv = document.getElementById('message');
-      messageDiv.textContent = text;
-      messageDiv.style.color = isSuccess ? '#27ae60' : '#e74c3c';
-      setTimeout(() => messageDiv.textContent = '', 3000);
-    }
+      headers.forEach(header => {
+        const th = document.createElement("th");
+        th.innerText = header;
+        headerRow.appendChild(th);
+      });
 
-    // Handel form submission
-    document.getElementById('resultForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const teamA = document.getElementById('teamA').value;
-      const teamB = document.getElementById('teamB').value;
-      const scoreA = document.getElementById('scoreA').value;
-      const scoreB = document.getElementById('scoreB').value;
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
 
-      if (teamA === teamB) {
-        showMessage('Teams cannot be the same');
-        return;
-      }
+      const tbody = document.createElement("tbody");
 
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ teamA, teamB, scoreA, scoreB })
+      teams.forEach(team => {
+        const row = document.createElement("tr");
+        headers.forEach(h => {
+          const td = document.createElement("td");
+          td.innerText = team[h] ?? "";
+          row.appendChild(td);
         });
-        const result = await response.json();
-        if (result.error) throw new Error(result.error);
-        showMessage('Result submitted successfully', true);
-        document.getElementById('resultForm').reset();
-        loadPointsTables();
-        loadFixtures();
-      } catch (error) {
-        showMessage(`Error: ${error.message}`);
-      }
-    });
+        tbody.appendChild(row);
+      });
 
-    // Load fixtures (placeholder - customize as needed)
-    function loadFixtures() {
-      const fixturesList = document.getElementById('fixturesList');
-      // Example fixtures - replace with actual data or API call
-      fixturesList.innerHTML = `
-        <li>Ezaz vs Arnab - TBD</li>
-        <li>Ayan vs Salman - TBD</li>
-        <li>Surjo vs Mafid - TBD</li>
-        <!-- Add more fixtures -->
-      `;
+      table.appendChild(tbody);
+
+      const container = document.createElement("div");
+      container.className = "group-section";
+
+      const title = document.createElement("h2");
+      title.innerText = `📊 Group ${groupName}`;
+      container.appendChild(title);
+      container.appendChild(table);
+
+      return container;
     }
 
-    // Initialize
-    loadPointsTables();
-    loadTeams();
-    loadFixtures();
+    async function fetchPoints() {
+      const container = document.getElementById("pointsContainer");
+      container.innerHTML = "⏳ Loading points...";
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+
+        container.innerHTML = "";
+        Object.keys(data).forEach(group => {
+          const groupTable = createTable(group, data[group]);
+          container.appendChild(groupTable);
+        });
+      } catch (err) {
+        container.innerHTML = "❌ Failed to load data.";
+        console.error(err);
+      }
+    }
+
+    window.onload = fetchPoints;
   </script>
 </body>
 </html>
