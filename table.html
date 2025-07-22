@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>⚽ E-Football Tournament</title>
   <style>
     body {
@@ -15,7 +15,7 @@
     h1, h2 {
       text-align: center;
     }
-    .fixture, .admin, .points-section {
+    .points-section {
       background: white;
       border-radius: 10px;
       padding: 15px;
@@ -23,20 +23,114 @@
       max-width: 800px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    table {
+    iframe {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+      height: 300px;
+      border: none;
+      border-radius: 10px;
     }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
+
+    /* Fixtures section */
+    .fixture {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 900px;
+      margin: 20px auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      color: #222;
+    }
+
+    .groups-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .day-section h3 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      color: #1a73e8;
+      border-bottom: 2px solid #1a73e8;
+      padding-bottom: 5px;
+    }
+
+    .group-card {
+      background: #f0f7ff;
+      border-radius: 10px;
+      padding: 15px 20px;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.15);
+      margin-bottom: 12px;
+    }
+
+    .group-card h4 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0b47a1;
+    }
+
+    .group-card ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .group-card ul li {
+      padding: 8px 0;
+      font-size: 1rem;
+      border-bottom: 1px solid #c8dafc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .group-card ul li:last-child {
+      border-bottom: none;
+    }
+
+    /* Different group colors */
+
+    .group-a {
+      background: #e3f2fd;
+      box-shadow: 0 2px 10px rgba(30, 136, 229, 0.3);
+    }
+
+    .group-b {
+      background: #fce4ec;
+      box-shadow: 0 2px 10px rgba(236, 64, 122, 0.3);
+    }
+
+    .group-c {
+      background: #fff3e0;
+      box-shadow: 0 2px 10px rgba(255, 183, 77, 0.3);
+    }
+
+    .group-d {
+      background: #e8f5e9;
+      box-shadow: 0 2px 10px rgba(102, 187, 106, 0.3);
+    }
+
+    /* Admin panel styles */
+    .admin {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
+
     .admin input, .admin select {
       padding: 8px;
       margin: 5px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      min-width: 120px;
     }
+
     button {
       padding: 10px 20px;
       background: #28a745;
@@ -44,15 +138,20 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
     }
     button:hover {
       background: #218838;
     }
-    iframe {
-      width: 100%;
-      height: 300px;
-      border: none;
-      border-radius: 10px;
+
+    #resultMsg {
+      margin-top: 12px;
+      font-weight: 700;
+      min-height: 1.5em;
+      color: #333;
     }
   </style>
 </head>
@@ -66,59 +165,129 @@
 
   <div class="fixture">
     <h2>🗓️ Fixtures</h2>
-    <pre>
-Day 1
-🅰️ Group A
-Ezaz 🆚 Arnab
-Ayan 🆚 Salman
-🅱️ Group B
-Surjo 🆚 Mafid
-Rafiul 🆚 Sezan
-🆎 Group C
-Uchas 🆚 Shami
-Yamin 🆚 Rohan
-🆑 Group D
-Kakon 🆚 Tusan
-Arman 🆚 Iram
+    <div class="groups-container">
+      <!-- Day 1 -->
+      <div class="day-section">
+        <h3>📅 Day 1</h3>
 
-Day 2
-🅰️ Group A
-Ezaz 🆚 Ayan
-Arnab 🆚 Salman
-🅱️ Group B
-Surjo 🆚 Rafiul
-Mafid 🆚 Sezan
-🆎 Group C
-Uchas 🆚 Yamin
-Shami 🆚 Rohan
-🆑 Group D
-Kakon 🆚 Arman
-Tusan 🆚 Iram
+        <div class="group-card group-a">
+          <h4>🅰️ Group A</h4>
+          <ul>
+            <li>Ezaz 🆚 Arnab</li>
+            <li>Ayan 🆚 Salman</li>
+          </ul>
+        </div>
 
-Day 3
-🅰️ Group A
-Ezaz 🆚 Salman
-Arnab 🆚 Ayan
-🅱️ Group B
-Surjo 🆚 Sezan
-Mafid 🆚 Rafiul
-🆎 Group C
-Uchas 🆚 Rohan
-Shami 🆚 Yamin
-🆑 Group D
-Kakon 🆚 Iram
-Tusan 🆚 Arman
-    </pre>
+        <div class="group-card group-b">
+          <h4>🅱️ Group B</h4>
+          <ul>
+            <li>Surjo 🆚 Mafid</li>
+            <li>Rafiul 🆚 Sezan</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-c">
+          <h4>🆎 Group C</h4>
+          <ul>
+            <li>Uchas 🆚 Shami</li>
+            <li>Yamin 🆚 Rohan</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-d">
+          <h4>🆑 Group D</h4>
+          <ul>
+            <li>Kakon 🆚 Tusan</li>
+            <li>Arman 🆚 Iram</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="day-section">
+        <h3>📅 Day 2</h3>
+
+        <div class="group-card group-a">
+          <h4>🅰️ Group A</h4>
+          <ul>
+            <li>Ezaz 🆚 Ayan</li>
+            <li>Arnab 🆚 Salman</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-b">
+          <h4>🅱️ Group B</h4>
+          <ul>
+            <li>Surjo 🆚 Rafiul</li>
+            <li>Mafid 🆚 Sezan</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-c">
+          <h4>🆎 Group C</h4>
+          <ul>
+            <li>Uchas 🆚 Yamin</li>
+            <li>Shami 🆚 Rohan</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-d">
+          <h4>🆑 Group D</h4>
+          <ul>
+            <li>Kakon 🆚 Arman</li>
+            <li>Tusan 🆚 Iram</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="day-section">
+        <h3>📅 Day 3</h3>
+
+        <div class="group-card group-a">
+          <h4>🅰️ Group A</h4>
+          <ul>
+            <li>Ezaz 🆚 Salman</li>
+            <li>Arnab 🆚 Ayan</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-b">
+          <h4>🅱️ Group B</h4>
+          <ul>
+            <li>Surjo 🆚 Sezan</li>
+            <li>Mafid 🆚 Rafiul</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-c">
+          <h4>🆎 Group C</h4>
+          <ul>
+            <li>Uchas 🆚 Rohan</li>
+            <li>Shami 🆚 Yamin</li>
+          </ul>
+        </div>
+
+        <div class="group-card group-d">
+          <h4>🆑 Group D</h4>
+          <ul>
+            <li>Kakon 🆚 Iram</li>
+            <li>Tusan 🆚 Arman</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="admin">
     <h2>🔐 Admin Panel</h2>
-    <input type="password" id="adminCode" placeholder="Enter Admin Code"><br>
-    <select id="teamA"></select>
-    <input type="number" id="scoreA" placeholder="Score A">
-    <select id="teamB"></select>
-    <input type="number" id="scoreB" placeholder="Score B">
-    <br><button onclick="submitResult()">Submit Result</button>
+    <input type="password" id="adminCode" placeholder="🔑 Enter Admin Code" autocomplete="off" /><br />
+    <select id="teamA" aria-label="Select Team A"></select>
+    <input type="number" id="scoreA" placeholder="Score A" min="0" />
+    <select id="teamB" aria-label="Select Team B"></select>
+    <input type="number" id="scoreB" placeholder="Score B" min="0" />
+    <br />
+    <button onclick="submitResult()">🚀 Submit Result</button>
     <p id="resultMsg"></p>
   </div>
 
@@ -129,26 +298,28 @@ Tusan 🆚 Arman
       const teamA = document.getElementById("teamA");
       const teamB = document.getElementById("teamB");
       TEAM_LIST.forEach(t => {
-        teamA.innerHTML += `<option value="${t}">${t}</option>`;
-        teamB.innerHTML += `<option value="${t}">${t}</option>`;
+        teamA.innerHTML += `<option value="${t}">⚽ ${t}</option>`;
+        teamB.innerHTML += `<option value="${t}">⚽ ${t}</option>`;
       });
     };
 
     async function submitResult() {
-      const code = document.getElementById("adminCode").value;
+      const code = document.getElementById("adminCode").value.trim();
       if (code !== "292929") {
-        alert("❌ Wrong admin code");
+        alert("❌ Wrong admin code. Please try again!");
         return;
       }
       const teamA = document.getElementById("teamA").value;
-      const scoreA = document.getElementById("scoreA").value;
+      const scoreA = document.getElementById("scoreA").value.trim();
       const teamB = document.getElementById("teamB").value;
-      const scoreB = document.getElementById("scoreB").value;
+      const scoreB = document.getElementById("scoreB").value.trim();
 
-      if (!teamA || !teamB || !scoreA || !scoreB || teamA === teamB) {
-        alert("❗Please fill all fields correctly.");
+      if (!teamA || !teamB || scoreA === "" || scoreB === "" || teamA === teamB) {
+        alert("⚠️ Please fill all fields correctly and select different teams.");
         return;
       }
+
+      document.getElementById("resultMsg").innerText = "⏳ Sending result...";
 
       try {
         const response = await fetch("https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec", {
@@ -159,9 +330,9 @@ Tusan 🆚 Arman
           body: JSON.stringify({ teamA, scoreA, teamB, scoreB })
         });
         const text = await response.text();
-        document.getElementById("resultMsg").innerText = text;
+        document.getElementById("resultMsg").innerText = "✅ " + text;
       } catch (err) {
-        document.getElementById("resultMsg").innerText = "❌ Network error: Failed to fetch";
+        document.getElementById("resultMsg").innerText = "❌ Network error: Failed to fetch. Please check your connection.";
       }
     }
   </script>
