@@ -126,7 +126,7 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxoHbWCCZNNVigZom-cMny_6oDJ2G8f-WC1ldGYuv71bCW9gTuxMB7nvd0W95UBkmVq/exec"; // Replace with your script URL
+  const API_URL = "https://script.google.com/macros/s/AKfycbxoHbWCCZNNVigZom-cMny_6oDJ2G8f-WC1ldGYuv71bCW9gTuxMB7nvd0W95UBkmVq/exec";
   const PASSWORD = "292929";
 
   const COLUMNS = ['Team', 'Group', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts'];
@@ -139,7 +139,6 @@
   const form = document.getElementById('match-form');
   const formMsg = document.getElementById('form-msg');
 
-  // Fetch and render group tables
   async function fetchAndRender() {
     container.innerHTML = "Loading data...";
     try {
@@ -147,7 +146,7 @@
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
 
-      // Group by Group field
+      // Group by Group
       const groups = {};
       data.forEach(row => {
         const group = row['Group'] || "Unknown";
@@ -201,7 +200,6 @@
     }
   }
 
-  // Login handler
   loginBtn.onclick = () => {
     const inputPass = document.getElementById('admin-password').value.trim();
     if (inputPass === PASSWORD) {
@@ -213,7 +211,6 @@
     }
   };
 
-  // Submit match result
   form.onsubmit = async (e) => {
     e.preventDefault();
     formMsg.style.color = "black";
@@ -230,21 +227,13 @@
       return;
     }
 
-    // Prepare POST payload
-    const payload = {
-      teamA,
-      teamB,
-      scoreA,
-      scoreB
-    };
+    const payload = { teamA, teamB, scoreA, scoreB };
 
     try {
       const response = await fetch(API_URL, {
         method: "POST",
         body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json"
-        }
+        headers: { "Content-Type": "application/json" }
       });
       const text = await response.text();
 
@@ -252,7 +241,6 @@
         formMsg.style.color = "green";
         formMsg.textContent = "✅ Match result updated successfully!";
         form.reset();
-        // Refresh tables
         fetchAndRender();
       } else {
         formMsg.style.color = "red";
@@ -264,11 +252,8 @@
     }
   };
 
-  // Initial data load
   fetchAndRender();
-
-  // Auto refresh every 5 minutes
-  setInterval(fetchAndRender, 300000);
+  setInterval(fetchAndRender, 300000); // refresh every 5 minutes
 </script>
 
 </body>
