@@ -2,114 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>E-Football Tournament 🏆</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>⚽ E-Football Tournament - Admin Panel</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
       padding: 20px;
+      color: #222;
     }
     h1, h2 {
-      text-align: center;
+      color: #2a9df4;
+      margin-bottom: 20px;
     }
-    .fixture-day {
+    form {
       background: #fff;
-      padding: 15px;
-      margin: 20px auto;
-      max-width: 700px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: auto;
     }
-    .group {
-      margin-top: 10px;
-      padding: 10px;
-      border-left: 4px solid #333;
-    }
-    .match {
-      padding-left: 20px;
-    }
-    iframe {
+    input[type="text"], input[type="number"] {
       width: 100%;
-      height: 600px;
-      border: none;
-      margin-top: 30px;
+      padding: 10px;
+      margin: 10px 0;
       border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #2a9df4;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1c7ed6;
+    }
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
   <h1>⚽ E-Football Tournament</h1>
-  <h2>📊 Live Group Stage Point Table</h2>
+  <h2>🛠️ Admin Panel - Update Match Result</h2>
 
-  <!-- Replace the iframe src with your actual public Google Sheet embed link -->
-  <iframe src="https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pubhtml?widget=true&amp;headers=false"></iframe>
+  <form id="matchForm">
+    <input type="text" id="teamA" placeholder="Team A Name" required />
+    <input type="number" id="scoreA" placeholder="Team A Score" min="0" required />
+    <input type="text" id="teamB" placeholder="Team B Name" required />
+    <input type="number" id="scoreB" placeholder="Team B Score" min="0" required />
+    <button type="submit">🚀 Update Result</button>
+  </form>
 
-  <div class="fixture-day">
-    <h2>🗓️ Day 1</h2>
+  <div id="status"></div>
 
-    <div class="group">🅰️ Group A
-      <div class="match">Ezaz 🆚 Arnab</div>
-      <div class="match">Ayan 🆚 Salman</div>
-    </div>
-    <div class="group">🅱️ Group B
-      <div class="match">Surjo 🆚 Mafid</div>
-      <div class="match">Rafiul 🆚 Sezan</div>
-    </div>
-    <div class="group">🆎 Group C
-      <div class="match">Uchas 🆚 Shami</div>
-      <div class="match">Yamin 🆚 Rohan</div>
-    </div>
-    <div class="group">🆑 Group D
-      <div class="match">Kakon 🆚 Tusan</div>
-      <div class="match">Arman 🆚 Iram</div>
-    </div>
-  </div>
+  <script>
+    const form = document.getElementById('matchForm');
+    const status = document.getElementById('status');
 
-  <div class="fixture-day">
-    <h2>🗓️ Day 2</h2>
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    <div class="group">🅰️ Group A
-      <div class="match">Ezaz 🆚 Ayan</div>
-      <div class="match">Arnab 🆚 Salman</div>
-    </div>
-    <div class="group">🅱️ Group B
-      <div class="match">Surjo 🆚 Rafiul</div>
-      <div class="match">Mafid 🆚 Sezan</div>
-    </div>
-    <div class="group">🆎 Group C
-      <div class="match">Uchas 🆚 Yamin</div>
-      <div class="match">Shami 🆚 Rohan</div>
-    </div>
-    <div class="group">🆑 Group D
-      <div class="match">Kakon 🆚 Arman</div>
-      <div class="match">Tusan 🆚 Iram</div>
-    </div>
-  </div>
+      const data = {
+        teamA: form.teamA.value.trim(),
+        scoreA: form.scoreA.value,
+        teamB: form.teamB.value.trim(),
+        scoreB: form.scoreB.value,
+      };
 
-  <div class="fixture-day">
-    <h2>🗓️ Day 3</h2>
+      status.textContent = '⏳ Sending data...';
 
-    <div class="group">🅰️ Group A
-      <div class="match">Ezaz 🆚 Salman</div>
-      <div class="match">Arnab 🆚 Ayan</div>
-    </div>
-    <div class="group">🅱️ Group B
-      <div class="match">Surjo 🆚 Sezan</div>
-      <div class="match">Mafid 🆚 Rafiul</div>
-    </div>
-    <div class="group">🆎 Group C
-      <div class="match">Uchas 🆚 Rohan</div>
-      <div class="match">Shami 🆚 Yamin</div>
-    </div>
-    <div class="group">🆑 Group D
-      <div class="match">Kakon 🆚 Iram</div>
-      <div class="match">Tusan 🆚 Arman</div>
-    </div>
-  </div>
+      try {
+        const response = await fetch('YOUR_WEB_APP_URL_HERE', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const text = await response.text();
+
+        status.textContent = text + " ✅";
+        form.reset();
+      } catch (error) {
+        status.textContent = "❌ Error sending data. Try again.";
+      }
+    });
+  </script>
 
 </body>
 </html>
