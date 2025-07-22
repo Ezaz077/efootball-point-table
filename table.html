@@ -76,10 +76,18 @@
 
       const data = await response.json();
 
+      // Group data client-side by "Group"
+      const grouped = data.reduce((acc, item) => {
+        const grp = item.Group || "Unknown";
+        if (!acc[grp]) acc[grp] = [];
+        acc[grp].push(item);
+        return acc;
+      }, {});
+
       container.innerHTML = "";
 
-      for (const group in data) {
-        const teams = data[group];
+      for (const group in grouped) {
+        const teams = grouped[group];
 
         const groupDiv = document.createElement('div');
         groupDiv.className = 'group-table';
