@@ -57,7 +57,7 @@
     margin-top: 10px;
     font-weight: bold;
   }
-  input[type="text"], input[type="number"], input[type="password"] {
+  input[type="text"], input[type="number"], input[type="password"], select {
     width: 100%;
     padding: 8px 10px;
     margin-top: 5px;
@@ -109,13 +109,17 @@
   <h2>🛠️ Update Match Result</h2>
   <form id="match-form">
     <label for="teamA">Team A</label>
-    <input type="text" id="teamA" name="teamA" required />
-
-    <label for="teamB">Team B</label>
-    <input type="text" id="teamB" name="teamB" required />
+    <select id="teamA" name="teamA" required>
+      <option value="">Select Team A</option>
+    </select>
 
     <label for="scoreA">Score A</label>
     <input type="number" id="scoreA" name="scoreA" min="0" required />
+
+    <label for="teamB">Team B</label>
+    <select id="teamB" name="teamB" required>
+      <option value="">Select Team B</option>
+    </select>
 
     <label for="scoreB">Score B</label>
     <input type="number" id="scoreB" name="scoreB" min="0" required />
@@ -126,7 +130,7 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec"; // <— Replace with your own script URL
+  const API_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec"; // Replace with your deployed Apps Script URL
   const PASSWORD = "292929";
 
   const COLUMNS = ['Team', 'Group', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts'];
@@ -138,6 +142,9 @@
   const loginMsg = document.getElementById('login-msg');
   const form = document.getElementById('match-form');
   const formMsg = document.getElementById('form-msg');
+
+  const teamASelect = document.getElementById('teamA');
+  const teamBSelect = document.getElementById('teamB');
 
   async function fetchAndRender() {
     container.innerHTML = "Loading data...";
@@ -200,6 +207,35 @@
     }
   }
 
+  async function populateTeamDropdowns() {
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+
+      // Extract unique team names
+      const teams = [...new Set(data.map(row => row['Team']))].sort();
+
+      // Clear existing options except the placeholder
+      teamASelect.length = 1;
+      teamBSelect.length = 1;
+
+      teams.forEach(team => {
+        let optionA = document.createElement('option');
+        optionA.value = team;
+        optionA.textContent = team;
+        teamASelect.appendChild(optionA);
+
+        let optionB = document.createElement('option');
+        optionB.value = team;
+        optionB.textContent = team;
+        teamBSelect.appendChild(optionB);
+      });
+    } catch (error) {
+      console.error("Error loading team names:", error);
+    }
+  }
+
   loginBtn.onclick = () => {
     const inputPass = document.getElementById('admin-password').value.trim();
     if (inputPass === PASSWORD) {
@@ -227,6 +263,12 @@
       return;
     }
 
+    if (teamA === teamB) {
+      formMsg.style.color = "red";
+      formMsg.textContent = "Team A and Team B cannot be the same.";
+      return;
+    }
+
     const payload = { teamA, teamB, scoreA, scoreB };
 
     try {
@@ -242,6 +284,7 @@
         formMsg.textContent = "✅ Match result updated successfully!";
         form.reset();
         fetchAndRender();
+        populateTeamDropdowns();
       } else {
         formMsg.style.color = "red";
         formMsg.textContent = "Error: " + text;
@@ -252,8 +295,13 @@
     }
   };
 
+  // Initial load
   fetchAndRender();
-  setInterval(fetchAndRender, 300000); // refresh every 5 min
+  populateTeamDropdowns();
+
+  // Refresh every 5 minutes
+  setInterval(fetchAndRender, 300000);
+  setInterval(populateTeamDropdowns, 300000);
 </script>
 
 </body>
