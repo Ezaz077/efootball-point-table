@@ -63,6 +63,7 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
+  let cachedData = null;
 
   async function loadPoints() {
     const container = document.getElementById('tables');
@@ -71,12 +72,21 @@
     errorMsg.textContent = "";
 
     try {
-      const response = await fetch(SCRIPT_URL, { mode: "cors" });
-      if (!response.ok) throw new Error("Network response was not ok");
+      if (!cachedData) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 7000); // 7 sec timeout
 
-      const data = await response.json();
+        const response = await fetch(SCRIPT_URL, { mode: "cors", signal: controller.signal });
+        clearTimeout(timeoutId);
 
-      // Group data client-side by "Group"
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        cachedData = await response.json();
+      }
+
+      const data = cachedData;
+
+      // Group by 'Group' client-side
       const grouped = data.reduce((acc, item) => {
         const grp = item.Group || "Unknown";
         if (!acc[grp]) acc[grp] = [];
@@ -133,13 +143,16 @@
 
         table.appendChild(tbody);
         groupDiv.appendChild(table);
-
         container.appendChild(groupDiv);
       }
 
     } catch (error) {
       container.innerHTML = "";
-      errorMsg.textContent = "❌ Failed to load data.";
+      if (error.name === 'AbortError') {
+        errorMsg.textContent = "⏳ Loading timed out. Please try again.";
+      } else {
+        errorMsg.textContent = "❌ Failed to load data.";
+      }
       console.error("Error fetching points:", error);
     }
   }
