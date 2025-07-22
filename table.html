@@ -1,166 +1,154 @@
-<!-- index.html - Upload this to GitHub Pages or any web hosting -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⚽ E-Football Tournament</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Football Tournament</title>
   <style>
     body {
       font-family: sans-serif;
-      background-color: #f9f9f9;
+      background: #f9f9f9;
       margin: 0;
       padding: 20px;
     }
-    h1, h2 {
-      text-align: center;
+    h1, h2, h3 {
+      color: #333;
+    }
+    .group-table {
+      margin-bottom: 30px;
     }
     iframe {
       width: 100%;
-      height: 400px;
+      height: 300px;
       border: 1px solid #ccc;
       border-radius: 10px;
     }
-    .fixtures, .admin-panel {
+    .fixture {
       background: #fff;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 5px solid #007bff;
+      border-radius: 5px;
     }
-    .admin-panel input, .admin-panel select {
-      padding: 10px;
-      margin: 5px;
-      width: calc(100% - 22px);
+    .admin {
+      margin-top: 40px;
+      padding: 20px;
+      background: #ffe;
+      border-radius: 10px;
+    }
+    .admin input, .admin select {
+      display: block;
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
     }
     button {
-      padding: 10px 15px;
-      margin-top: 10px;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
     }
   </style>
 </head>
 <body>
   <h1>⚽ E-Football Tournament</h1>
 
-  <h2>📊 Live Group Stage Point Table</h2>
-  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+  <h2>📊 Group Stage Point Tables</h2>
 
-  <div class="fixtures">
-    <h2>🗓️ Fixtures</h2>
-    <pre>
-⭕ Day 1
-🅰️ Group A
-Ezaz 🔚 Arnab
-Ayan 🔚 Salman
-
-🅱️ Group B
-Surjo 🔚 Mafid
-Rafiul 🔚 Sezan
-
-🆎 Group C
-Uchas 🔚 Shami
-Yamin 🔚 Rohan
-
-🌋 Group D
-Kakon 🔚 Tusan
-Arman 🔚 Iram
-
-⭕ Day 2
-🅰️ Group A
-Ezaz 🔚 Ayan
-Arnab 🔚 Salman
-
-🅱️ Group B
-Surjo 🔚 Rafiul
-Mafid 🔚 Sezan
-
-🆎 Group C
-Uchas 🔚 Yamin
-Shami 🔚 Rohan
-
-🌋 Group D
-Kakon 🔚 Arman
-Tusan 🔚 Iram
-
-⭕ Day 3
-🅰️ Group A
-Ezaz 🔚 Salman
-Arnab 🔚 Ayan
-
-🅱️ Group B
-Surjo 🔚 Sezan
-Mafid 🔚 Rafiul
-
-🆎 Group C
-Uchas 🔚 Rohan
-Shami 🔚 Yamin
-
-🌋 Group D
-Kakon 🔚 Iram
-Tusan 🔚 Arman
-    </pre>
+  <div class="group-table">
+    <h3>🅰️ Group A</h3>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+  </div>
+  <div class="group-table">
+    <h3>🅱️ Group B</h3>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=12345678&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+  </div>
+  <div class="group-table">
+    <h3>🆎 Group C</h3>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=23456789&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+  </div>
+  <div class="group-table">
+    <h3>🆑 Group D</h3>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=34567890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
   </div>
 
-  <div class="admin-panel">
-    <h2>👨‍💼 Admin Panel</h2>
-    <input type="password" id="adminPass" placeholder="Enter Admin PIN">
-    <div id="adminForm" style="display:none;">
-      <select id="teamA">
-        <option value="">-- Select Team A --</option>
-        <option>Ezaz</option><option>Arnab</option><option>Ayan</option><option>Salman</option>
-        <option>Surjo</option><option>Mafid</option><option>Rafiul</option><option>Sezan</option>
-        <option>Uchas</option><option>Shami</option><option>Yamin</option><option>Rohan</option>
-        <option>Kakon</option><option>Tusan</option><option>Arman</option><option>Iram</option>
-      </select>
-      <input type="number" id="scoreA" placeholder="Score A">
-      <select id="teamB">
-        <option value="">-- Select Team B --</option>
-        <option>Ezaz</option><option>Arnab</option><option>Ayan</option><option>Salman</option>
-        <option>Surjo</option><option>Mafid</option><option>Rafiul</option><option>Sezan</option>
-        <option>Uchas</option><option>Shami</option><option>Yamin</option><option>Rohan</option>
-        <option>Kakon</option><option>Tusan</option><option>Arman</option><option>Iram</option>
-      </select>
-      <input type="number" id="scoreB" placeholder="Score B">
+  <h2>🗓️ Fixtures</h2>
+  <div class="fixture">
+    <h3>Day 1</h3>
+    🅰️ Group A: Ezaz 🆚 Arnab, Ayan 🆚 Salman<br>
+    🅱️ Group B: Surjo 🆚 Mafid, Rafiul 🆚 Sezan<br>
+    🆎 Group C: Uchas 🆚 Shami, Yamin 🆚 Rohan<br>
+    🆑 Group D: Kakon 🆚 Tusan, Arman 🆚 Iram
+  </div>
+  <div class="fixture">
+    <h3>Day 2</h3>
+    🅰️ Group A: Ezaz 🆚 Ayan, Arnab 🆚 Salman<br>
+    🅱️ Group B: Surjo 🆚 Rafiul, Mafid 🆚 Sezan<br>
+    🆎 Group C: Uchas 🆚 Yamin, Shami 🆚 Rohan<br>
+    🆑 Group D: Kakon 🆚 Arman, Tusan 🆚 Iram
+  </div>
+  <div class="fixture">
+    <h3>Day 3</h3>
+    🅰️ Group A: Ezaz 🆚 Salman, Arnab 🆚 Ayan<br>
+    🅱️ Group B: Surjo 🆚 Sezan, Mafid 🆚 Rafiul<br>
+    🆎 Group C: Uchas 🆚 Rohan, Shami 🆚 Yamin<br>
+    🆑 Group D: Kakon 🆚 Iram, Tusan 🆚 Arman
+  </div>
+
+  <div class="admin">
+    <h2>🔒 Admin Panel</h2>
+    <input type="password" id="pin" placeholder="Enter Admin PIN" />
+    <div id="form" style="display: none;">
+      <select id="teamA"></select>
+      <input type="number" id="scoreA" placeholder="Score Team A" />
+      <select id="teamB"></select>
+      <input type="number" id="scoreB" placeholder="Score Team B" />
       <button onclick="submitResult()">Submit Result</button>
     </div>
-    <p id="message"></p>
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
+    const teams = ["Ezaz", "Arnab", "Ayan", "Salman", "Surjo", "Mafid", "Rafiul", "Sezan", "Uchas", "Shami", "Yamin", "Rohan", "Kakon", "Tusan", "Arman", "Iram"];
 
-    document.getElementById("adminPass").addEventListener("input", function() {
+    const teamASelect = document.getElementById('teamA');
+    const teamBSelect = document.getElementById('teamB');
+
+    teams.forEach(t => {
+      teamASelect.innerHTML += `<option value="${t}">${t}</option>`;
+      teamBSelect.innerHTML += `<option value="${t}">${t}</option>`;
+    });
+
+    document.getElementById('pin').addEventListener('input', function () {
       if (this.value === "292929") {
-        document.getElementById("adminForm").style.display = "block";
+        document.getElementById('form').style.display = "block";
       } else {
-        document.getElementById("adminForm").style.display = "none";
+        document.getElementById('form').style.display = "none";
       }
     });
 
     function submitResult() {
-      const teamA = document.getElementById("teamA").value;
-      const teamB = document.getElementById("teamB").value;
-      const scoreA = parseInt(document.getElementById("scoreA").value);
-      const scoreB = parseInt(document.getElementById("scoreB").value);
+      const data = {
+        teamA: teamASelect.value,
+        scoreA: parseInt(document.getElementById('scoreA').value),
+        teamB: teamBSelect.value,
+        scoreB: parseInt(document.getElementById('scoreB').value)
+      };
 
-      if (!teamA || !teamB || isNaN(scoreA) || isNaN(scoreB)) {
-        alert("Please fill all fields correctly.");
-        return;
-      }
-
-      fetch(API_URL, {
+      fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teamA, scoreA, teamB, scoreB })
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
       })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("message").innerText = "✅ Match result submitted.";
-      })
-      .catch(err => {
-        document.getElementById("message").innerText = "❌ Failed to submit: " + err.message;
-      });
+      .then(() => alert("✅ Match result submitted!"))
+      .catch(() => alert("❌ Network error: Failed to fetch"));
     }
   </script>
 </body>
