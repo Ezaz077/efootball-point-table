@@ -1,380 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>⚽ E-Football League Table (Live)</title>
-<style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f0f4f8;
-    margin: 0;
-    padding: 10px;
-  }
-  .container {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
-    position: relative;
-  }
-  .admin-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    z-index: 10;
-    animation: pulseGlow 2s infinite;
-  }
-  .admin-toggle:hover { background: #2980b9; }
-  .header {
-    background: linear-gradient(90deg,#1e3c72,#2a5298);
-    padding: 20px 10px 10px;
-    color: #fff;
-    text-align: center;
-  }
-  .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
-  .header p { font-size: 12px; margin: 5px 0 0; }
-  .top-player {
-    text-align: center;
-    margin-top: 10px;
-  }
-  .top-player img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 4px solid gold;
-    object-fit: cover;
-    animation: neonGlow 2s ease-in-out infinite alternate;
-  }
-  .top-player p {
-    margin: 5px 0 0;
-    font-weight: bold;
-    color: #2c3e50;
-  }
-  .top-player .ball {
-    display: inline-block;
-    margin-left: 5px;
-    animation: bounce 1s infinite;
-  }
-  .admin-section {
-    display: none;
-    padding: 10px;
-    background: #eef6fc;
-    text-align: center;
-    animation: slideDown 0.3s ease;
-  }
-  .admin-section input {
-    width: 70%;
-    padding: 6px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 5px;
-  }
-  .admin-section button {
-    width: 25%;
-    padding: 6px;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .admin-section button:hover { background: #2980b9; }
-  .form-section {
-    padding: 10px;
-    display: none;
-    flex-wrap: wrap;
-    gap: 5px;
-    animation: fadeIn 0.5s ease;
-  }
-  .form-section select, .form-section input {
-    flex: 1 1 48%;
-    padding: 6px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .form-section button {
-    width: 100%;
-    padding: 8px;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .form-section button:hover { background: #2980b9; }
-  .description {
-    background: #eaf3fc;
-    color: #2c3e50;
-    padding: 8px;
-    text-align: center;
-    font-size: 12px;
-    border-bottom: 1px solid #ccc;
-    animation: fadeIn 0.5s ease;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    opacity: 0;
-    animation: fadeIn 1s ease forwards;
-    animation-delay: 0.3s;
-  }
-  th, td {
-    padding: 6px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
-  tbody tr {
-    animation: rowPulse 4s ease-in-out infinite;
-  }
-  th {
-    background: #2c3e50;
-    color: white;
-    font-size: 13px;
-  }
-
-  .last-matches {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 10px;
-  }
-  .match-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #ffffff;
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    padding: 6px 10px;
-    font-size: 12px;
-    color: #2c3e50;
-    transition: transform 0.2s;
-    gap: 8px;
-  }
-  .match-card:hover {
-    transform: translateY(-2px);
-  }
-  .match-team {
-    width: 80px;
-    text-align: center;
-    font-weight: 500;
-  }
-  .match-score {
-    background: #3498db;
-    color: white;
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-weight: bold;
-    min-width: 40px;
-    text-align: center;
-  }
-
-  .footer {
-    text-align: center;
-    font-size: 10px;
-    color: #777;
-    padding: 8px 0 10px;
-    animation: fadeIn 0.5s ease;
-  }
-  @media (max-width: 480px) {
-    .admin-toggle {
-      top: 5px;
-      right: 5px;
-      font-size: 10px;
-      padding: 3px 6px;
-    }
-    .header h1 { font-size: 16px; }
-    .header p { font-size: 10px; }
-    .top-player img { width: 80px; height: 80px; }
-    .form-section select, .form-section input { flex: 1 1 100%; }
-    th, td { font-size: 11px; padding: 4px; }
-  }
-  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-  @keyframes slideDown { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
-  @keyframes pulseGlow { 0%,100%{box-shadow:0 0 5px #3498db;} 50%{box-shadow:0 0 12px #3498db;} }
-  @keyframes neonGlow { from{box-shadow:0 0 5px gold,0 0 10px gold;} to{box-shadow:0 0 10px gold,0 0 20px gold;} }
-  @keyframes rowPulse { 0%,100%{background:white;} 50%{background:#f9fcff;} }
-  @keyframes bounce { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-4px);} }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>⚽ E‑Football Tournament Live</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin:0; padding:10px; }
+    .container { max-width:600px; margin:auto; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); position:relative; overflow:hidden; }
+    .admin-toggle{position:absolute;top:10px;right:10px;background:#3498db;color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer;z-index:10;}
+    .header{background:linear-gradient(90deg,#1e3c72,#2a5298);padding:15px;color:#fff;text-align:center;}
+    .header h1{margin:0;font-size:20px;text-transform:uppercase;}
+    .header p{margin:5px 0 0;font-size:12px;}
+    .admin-section{display:none;padding:10px;background:#eef6fc;text-align:center;}
+    .admin-section input{width:70%;padding:6px;font-size:14px;border:1px solid #ccc;border-radius:4px;margin-bottom:5px;}
+    .admin-section button{width:25%;padding:6px;background:#3498db;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer;}
+    .form-section{display:none; padding:10px;flex-wrap:wrap; gap:5px;}
+    .form-section select, .form-section input{flex:1 1 48%;padding:6px;font-size:14px;border:1px solid #ccc;border-radius:4px;}
+    .form-section button{width:100%;padding:8px;background:#3498db;color:#fff;border:none;border-radius:5px;font-size:14px;cursor:pointer;}
+    .description{background:#eaf3fc;color:#2c3e50;padding:8px;text-align:center;font-size:12px;border-bottom:1px solid #ccc;}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px 0;}
+    th,td{padding:6px;border:1px solid #ddd;text-align:center;}
+    th{background:#2c3e50;color:#fff;font-size:13px;}
+    .last-matches, #fixtures {padding:10px; display:flex; flex-direction:column; gap:6px;}
+    .match-card{display:flex;justify-content:center;align-items:center;background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1);padding:6px 10px; font-size:12px; gap:8px;}
+    .match-team{width:80px;text-align:center;font-weight:500;}
+    .match-score{background:#95a5a6;color:#fff;border-radius:4px;padding:2px 8px;font-weight:bold;min-width:40px;text-align:center;}
+    .footer{text-align:center;font-size:10px;color:#777;padding:8px 0 10px;}
+    @media (max-width:480px){.admin-toggle{top:5px;right:5px;font-size:10px;padding:3px 6px;} .header h1{font-size:16px;} .form-section select,.form-section input{flex:1 1 100%;} th,td{font-size:11px;padding:4px;}}
+  </style>
 </head>
 <body>
-<div class="container">
-  <button class="admin-toggle" onclick="toggleAdmin()"> Admin</button>
+  <div class="container">
+    <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
+    <div class="header">
+      <h1>E‑Football Tournament 2025</h1>
+      <p>Live Group Tables & Fixtures</p>
+    </div>
 
-  <div class="header">
-    <h1>🎮 E-Football Tournament 2025</h1>
-    <p>Live & Shared Table | Admin-protected</p>
+    <div class="admin-section" id="adminSection">
+      <input type="password" id="adminCode" placeholder="Enter admin code">
+      <button onclick="checkAdmin()">OK</button>
+    </div>
+
+    <div class="form-section" id="addForm">
+      <select id="teamA"><!-- auto-filled --></select>
+      <input type="number" id="scoreA" placeholder="Goals A">
+      <select id="teamB"><!-- auto-filled --></select>
+      <input type="number" id="scoreB" placeholder="Goals B">
+      <button onclick="addResult()">Add Result</button>
+    </div>
+
+    <div class="description">🏆 Group Standings</div>
+    <div id="groupTables"></div>
+
+    <div class="description">📅 Match Fixtures (Day-wise)</div>
+    <div id="fixtures"></div>
+
+    <div class="description">⚽ Last Results</div>
+    <div class="last-matches" id="lastMatches"></div>
+
+    <div class="footer">Built by Ezaz • Live-updates via Google Sheets</div>
   </div>
-
-  <div class="admin-section" id="adminSection">
-    <input type="password" id="adminCode" placeholder="Enter admin code">
-    <button onclick="checkAdmin()">OK</button>
-  </div>
-
-  <div class="top-player" id="topPlayer" style="display:none;">
-    <img src="" alt="Top Player" id="topPlayerImg" onerror="this.src='https://via.placeholder.com/100'">
-    <p id="topPlayerName"></p>
-    <span class="ball">⚽</span>
-  </div>
-
-  <div class="form-section" id="addForm">
-    <select id="teamA">
-      <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
-      <option>Mafid</option><option>Kakon</option><option>Shami</option>
-    </select>
-    <input type="number" id="scoreA" placeholder="Goals A">
-    <select id="teamB">
-      <option>Ezaz</option><option>Surjo</option><option>Uchas</option>
-      <option>Mafid</option><option>Kakon</option><option>Shami</option>
-    </select>
-    <input type="number" id="scoreB" placeholder="Goals B">
-    <button onclick="addResult()">➕ Add Result</button>
-  </div>
-
-  <div class="description" id="loadingMessage">⏳ Loading table, please wait...</div>
-  <div class="description" id="tableDescription" style="display:none;">
-    🏆 Live League Table Updated for Everyone!
-  </div>
-
-  <table id="pointsTable">
-    <thead>
-      <tr>
-        <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
-        <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <div class="description">⚽ Last 5 Match Results</div>
-  <div class="last-matches" id="lastMatches"></div>
-
-  <div class="footer">Updated Live | Built by Ezaz ⚽</div>
-</div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyQdeHLEnyE4uYfaZCjHBJjuUzrmvJG3iZucUyHAv2Z8wE1NeKFwJ4FvR2F3V8Szj2jtg/exec";
+const API_URL = "YOUR_GOOGLE_SHEETS_SCRIPT_URL";
 const SECRET_CODE = "29292929";
-const playerImages = {
-  "Kakon": "https://i.imgur.com/XhONWgL.png",
-  "Ezaz": "https://i.imgur.com/gjRZizs.jpeg",
-  "Mafid": "https://i.imgur.com/k1uChd2.jpeg"
+
+const fixtures = {
+  "Day 1": {A:[["Ezaz","Arnab"],["Ayan","Salman"]],B:[["Surjo","Mafid"],["Rafiul","Sezan"]],C:[["Uchas","Shami"],["Yamin","Rohan"]],D:[["Kakon","Tusan"],["Arman","X"]]},
+  "Day 2": {A:[["Ezaz","Ayan"],["Arnab","Salman"]],B:[["Surjo","Rafiul"],["Mafid","Sezan"]],C:[["Uchas","Yamin"],["Shami","Rohan"]],D:[["Kakon","Arman"],["Tusan","X"]]},
+  "Day 3": {A:[["Ezaz","Salman"],["Arnab","Ayan"]],B:[["Surjo","Sezan"],["Mafid","Rafiul"]],C:[["Uchas","Rohan"],["Shami","Yamin"]],D:[["Kakon","X"],["Tusan","Arman"]]}
 };
 
-const lastMatches = [
-"Uchas 3 – 1 Shami",
-  "Ezaz 0 – 3 Kakon",
-  "Ezaz 1 – 1 Mafid",
-  "Shami 0 – 2 Surjo",
-  "Kakon 2 – 4 Uchas",
-  "Kakon 2 – 1 Surjo",
-  "Shami 1 – 8 Mafid",
-  "Kakon 5 – 1 Shami",
-  "Ezaz 2 – 0 Surjo",
-  "Uchas 1 – 3 Mafid",
-  "Ezaz 3 – 2 Uchas"
-];
+function toggleAdmin(){ let s=document.getElementById("adminSection"); s.style.display=s.style.display==="block"?"none":"block"; }
+function checkAdmin(){
+  if(document.getElementById("adminCode").value===SECRET_CODE){
+    document.getElementById("addForm").style.display="flex";
+    toggleAdmin();
+  } else alert("Wrong code!");
+}
 
-function toggleAdmin() {
-  const section = document.getElementById("adminSection");
-  section.style.display = section.style.display === "block" ? "none" : "block";
-}
-function checkAdmin() {
-  const input = document.getElementById("adminCode").value;
-  if (input === SECRET_CODE) {
-    document.getElementById("addForm").style.display = "flex";
-    document.getElementById("adminSection").style.display = "none";
-    alert("✅ Admin mode enabled!");
-  } else { alert("❌ Wrong code!"); }
-}
-async function loadTable() {
-  document.getElementById("loadingMessage").style.display="block";
-  document.getElementById("tableDescription").style.display="none";
-  try {
-    const res = await fetch(API_URL+"?method=getTable");
-    const data = await res.json();
-    const tbody = document.querySelector("#pointsTable tbody");
-    tbody.innerHTML="";
-    const teams=[];
-    for(let i=1;i<data.length;i++){
-      const r=data[i];
-      teams.push({name:r[0],played:+r[1],win:+r[2],draw:+r[3],loss:+r[4],gf:+r[5],ga:+r[6],gd:+r[7],pts:+r[8]});
-    }
-    teams.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
-    const top=teams[0];
-    if(top && playerImages[top.name]){
-      document.getElementById("topPlayerImg").src=playerImages[top.name];
-      document.getElementById("topPlayerName").textContent=`🏆 Current Top Player: ${top.name}`;
-      document.getElementById("topPlayer").style.display="block";
-    } else {
-      document.getElementById("topPlayer").style.display="none";
-    }
-    for(const t of teams){
-      tbody.innerHTML+=`<tr><td>${t.name}</td><td>${t.played}</td><td>${t.win}</td><td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.gd}</td><td>${t.pts}</td></tr>`;
-    }
-    document.getElementById("loadingMessage").style.display="none";
-    document.getElementById("tableDescription").style.display="block";
-  } catch(e){
-    console.error(e);
-    document.getElementById("loadingMessage").textContent="❌ Failed to load table.";
+async function loadGroupTables(){
+  let container=document.getElementById("groupTables");
+  container.innerHTML="";
+  let res=await fetch(API_URL+'?method=getTableAllGroups');
+  let groups=await res.json();
+  for(let g in groups){
+    let tbl=document.createElement("table");
+    tbl.innerHTML=`<caption><strong>Group ${g}</strong></caption><thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;
+    groups[g].forEach(r=>{ tbl.innerHTML+=`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[8]}</td></tr>`; });
+    tbl.innerHTML+="</tbody>";
+    container.appendChild(tbl);
   }
 }
-function showLastMatches(){
-  const container = document.getElementById("lastMatches");
-  container.innerHTML = "";
-  lastMatches.slice(0,5).forEach(match=>{
-    const parts = match.split(" ");
-    const teamA = parts[0];
-    const scoreA = parts[1];
-    const scoreB = parts[3];
-    const teamB = parts[4];
-    container.innerHTML += `
-      <div class="match-card">
-        <div class="match-team">${teamA}</div>
-        <div class="match-score">${scoreA} - ${scoreB}</div>
-        <div class="match-team">${teamB}</div>
-      </div>
-    `;
+
+function showFixtures(){
+  const container=document.getElementById("fixtures");
+  container.innerHTML="";
+  for(let day in fixtures){
+    container.innerHTML+=`<div class="match-card" style="font-weight:bold;">🗓️ ${day}</div>`;
+    for(let g in fixtures[day]){
+      container.innerHTML+=`<div class="match-card"><strong>Group ${g}:</strong></div>`;
+      fixtures[day][g].forEach(m=>{
+        container.innerHTML+=`<div class="match-card">${m[0]} vs ${m[1]}</div>`;
+      });
+    }
+  }
+}
+
+const lastMatches=["Ezaz 3‑1 Arnab","Surjo 2‑0 Mafid"];
+
+function showLast(){
+  let c=document.getElementById("lastMatches");
+  c.innerHTML="";
+  lastMatches.slice(0,5).forEach(m=>{
+    let [t1,s1,s2,t2]=m.split(' ');
+    c.innerHTML+=`<div class="match-card"><div class="match-team">${t1}</div><div class="match-score">${s1}‑${s2}</div><div class="match-team">${t2}</div></div>`;
   });
 }
+
 async function addResult(){
-  const a=document.getElementById("teamA").value,b=document.getElementById("teamB").value;
-  const gA=+document.getElementById("scoreA").value,gB=+document.getElementById("scoreB").value;
-  if(a===b||isNaN(gA)||isNaN(gB)) return alert("Invalid input!");
-  lastMatches.unshift(`${a} ${gA} – ${gB} ${b}`);
-  const res=await fetch(API_URL+"?method=getTable");
-  const data=await res.json(),teams={};
-  for(let i=1;i<data.length;i++){
-    const r=data[i];
-    teams[r[0]]={played:+r[1],win:+r[2],draw:+r[3],loss:+r[4],gf:+r[5],ga:+r[6],gd:+r[7],pts:+r[8]};
-  }
-  updateStats(teams[a],gA,gB); updateStats(teams[b],gB,gA);
-  await updateTeam(a,teams[a]); await updateTeam(b,teams[b]);
-  loadTable(); showLastMatches();
+  let a=document.getElementById("teamA").value,b=document.getElementById("teamB").value;
+  let gA=+document.getElementById("scoreA").value,gB=+document.getElementById("scoreB").value;
+  if(a===b||isNaN(gA)||isNaN(gB)) return alert("Invalid!");
+  await fetch(API_URL+`?method=addResult&a=${a}&gA=${gA}&b=${b}&gB=${gB}`);
+  lastMatches.unshift(`${a} ${gA}-${gB} ${b}`);
+  loadGroupTables(); showLast();
 }
-function updateStats(t,gf,ga){t.played++;t.gf+=gf;t.ga+=ga;t.gd=t.gf-t.ga;
-  if(gf>ga){t.win++;t.pts+=3;} else if(gf===ga){t.draw++;t.pts+=1;} else{t.loss++;}
-}
-async function updateTeam(name,s){
-  const p=new URLSearchParams({method:"updateTeam",teamName:name,played:s.played,win:s.win,draw:s.draw,loss:s.loss,gf:s.gf,ga:s.ga,gd:s.gd,pts:s.pts});
-  await fetch(API_URL+"?"+p);
-}
-loadTable(); showLastMatches();
+
+window.onload=()=>{
+  loadGroupTables(); showFixtures(); showLast();
+};
 </script>
 </body>
 </html>
