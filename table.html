@@ -3,103 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>⚽ E-Football Tournament - Admin Panel</title>
+  <title>⚽ E-Football Tournament</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f9fafb;
       padding: 20px;
       color: #222;
+      max-width: 900px;
+      margin: auto;
     }
     h1, h2 {
       color: #2a9df4;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
-    form {
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      margin-bottom: 40px;
+    }
+    .fixtures {
       background: #fff;
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 400px;
-      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
     }
-    input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
+    .day {
+      margin-bottom: 30px;
     }
-    button {
-      background-color: #2a9df4;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
+    .group {
+      margin-bottom: 20px;
     }
-    button:hover {
-      background-color: #1c7ed6;
-    }
-    #status {
-      margin-top: 15px;
+    .group-title {
       font-weight: bold;
-      text-align: center;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    .match {
+      font-size: 1rem;
+      margin-left: 15px;
+      margin-bottom: 6px;
     }
   </style>
 </head>
 <body>
 
   <h1>⚽ E-Football Tournament</h1>
-  <h2>🛠️ Admin Panel - Update Match Result</h2>
 
-  <form id="matchForm">
-    <input type="text" id="teamA" placeholder="Team A Name" required />
-    <input type="number" id="scoreA" placeholder="Team A Score" min="0" required />
-    <input type="text" id="teamB" placeholder="Team B Name" required />
-    <input type="number" id="scoreB" placeholder="Team B Score" min="0" required />
-    <button type="submit">🚀 Update Result</button>
-  </form>
+  <h2>📊 Group Stage Point Table (Live)</h2>
+  <iframe 
+    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6w1v5qL_BA_9eW6Lh9eYO6v7eK_SXAY7zjkg1N4xE4tX_xYk-XYcOUvJd8-TqHzoOUyyG3Q_7rPFEo/pubhtml?widget=true&amp;headers=false" 
+    frameborder="0" 
+    scrolling="no">
+  </iframe>
 
-  <div id="status"></div>
+  <div class="fixtures">
+    <h2>🗓️ Fixtures</h2>
 
-  <script>
-    const form = document.getElementById('matchForm');
-    const status = document.getElementById('status');
+    <div class="day">
+      <h3>🗓️ Day 1</h3>
+      
+      <div class="group">
+        <div class="group-title">🅰️ Group A</div>
+        <div class="match">Ezaz 🆚 Arnab</div>
+        <div class="match">Ayan 🆚 Salman</div>
+      </div>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      <div class="group">
+        <div class="group-title">🅱️ Group B</div>
+        <div class="match">Surjo 🆚 Mafid</div>
+        <div class="match">Rafiul 🆚 Sezan</div>
+      </div>
 
-      const data = {
-        teamA: form.teamA.value.trim(),
-        scoreA: form.scoreA.value,
-        teamB: form.teamB.value.trim(),
-        scoreB: form.scoreB.value,
-      };
+      <div class="group">
+        <div class="group-title">🆎 Group C</div>
+        <div class="match">Uchas 🆚 Shami</div>
+        <div class="match">Yamin 🆚 Rohan</div>
+      </div>
 
-      status.textContent = '⏳ Sending data...';
+      <div class="group">
+        <div class="group-title">🆑 Group D</div>
+        <div class="match">Kakon 🆚 Tusan</div>
+        <div class="match">Arman 🆚 Iram</div>
+      </div>
+    </div>
 
-      try {
-        const response = await fetch('YOUR_WEB_APP_URL_HERE', {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: { 'Content-Type': 'application/json' }
-        });
+    <div class="day">
+      <h3>🗓️ Day 2</h3>
+      
+      <div class="group">
+        <div class="group-title">🅰️ Group A</div>
+        <div class="match">Ezaz 🆚 Ayan</div>
+        <div class="match">Arnab 🆚 Salman</div>
+      </div>
 
-        const text = await response.text();
+      <div class="group">
+        <div class="group-title">🅱️ Group B</div>
+        <div class="match">Surjo 🆚 Rafiul</div>
+        <div class="match">Mafid 🆚 Sezan</div>
+      </div>
 
-        status.textContent = text + " ✅";
-        form.reset();
-      } catch (error) {
-        status.textContent = "❌ Error sending data. Try again.";
-      }
-    });
-  </script>
+      <div class="group">
+        <div class="group-title">🆎 Group C</div>
+        <div class="match">Uchas 🆚 Yamin</div>
+        <div class="match">Shami 🆚 Rohan</div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🆑 Group D</div>
+        <div class="match">Kakon 🆚 Arman</div>
+        <div class="match">Tusan 🆚 Iram</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <h3>🗓️ Day 3</h3>
+      
+      <div class="group">
+        <div class="group-title">🅰️ Group A</div>
+        <div class="match">Ezaz 🆚 Salman</div>
+        <div class="match">Arnab 🆚 Ayan</div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🅱️ Group B</div>
+        <div class="match">Surjo 🆚 Sezan</div>
+        <div class="match">Mafid 🆚 Rafiul</div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🆎 Group C</div>
+        <div class="match">Uchas 🆚 Rohan</div>
+        <div class="match">Shami 🆚 Yamin</div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🆑 Group D</div>
+        <div class="match">Kakon 🆚 Iram</div>
+        <div class="match">Tusan 🆚 Arman</div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
