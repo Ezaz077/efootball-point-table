@@ -1,308 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>⚽ E-Football Tournament - Live Points & Admin</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f9fafb;
-    padding: 20px;
-    max-width: 900px;
-    margin: auto;
-    color: #222;
-  }
-  h1, h2 {
-    color: #2a9df4;
-    margin-bottom: 20px;
-  }
-  .group-table {
-    background: #fff;
-    padding: 15px 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 40px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-  }
-  th, td {
-    padding: 10px 12px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-  }
-  th {
-    background-color: #2a9df4;
-    color: white;
-  }
-  caption {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #1e65c9;
-  }
-  #admin-section {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 40px;
-    display: none;
-  }
-  label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-  input[type="text"], input[type="number"], input[type="password"], select {
-    width: 100%;
-    padding: 8px 10px;
-    margin-top: 5px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  button {
-    margin-top: 15px;
-    padding: 12px 25px;
-    background-color: #2a9df4;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  button:hover {
-    background-color: #1e65c9;
-  }
-  #login-section {
-    margin-bottom: 40px;
-  }
-  #login-section input {
-    max-width: 200px;
-    display: inline-block;
-    margin-right: 10px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚽ E-Football Tournament</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: 1px solid #ccc;
+      margin-bottom: 30px;
+    }
+    .admin {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      max-width: 400px;
+    }
+    label, select, input {
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .fixtures {
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
+  <h2>📊 Group A Table</h2>
+  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=0&single=true&widget=true&headers=false"></iframe>
 
-<h1>⚽ E-Football Tournament - Live Group Stage Points</h1>
+  <h2>📊 Group B Table</h2>
+  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=123456789&single=true&widget=true&headers=false"></iframe>
 
-<div id="tables-container">
-  Loading data...
-</div>
+  <div class="fixtures">
+    <h2>📅 Fixtures</h2>
+    <p>🗓️ <strong>Day 1</strong><br/>
+      🅰️ Ezaz 🆚 Arnab<br/>
+      🅱️ Surjo 🆚 Mafid<br/>
+      🆎 Uchas 🆚 Shami<br/>
+      🆑 Kakon 🆚 Tusan
+    </p>
+    <p>🗓️ <strong>Day 2</strong><br/>
+      🅰️ Ezaz 🆚 Ayan<br/>
+      🅱️ Rafiul 🆚 Sezan<br/>
+      🆎 Yamin 🆚 Rohan<br/>
+      🆑 Arman 🆚 Iram
+    </p>
+  </div>
 
-<!-- Admin Login -->
-<div id="login-section">
-  <label for="admin-password"><strong>Admin Password:</strong></label>
-  <input type="password" id="admin-password" placeholder="Enter password" />
-  <button id="login-btn">Login as Admin</button>
-  <p id="login-msg" style="color:red; margin-top:8px;"></p>
-</div>
+  <div class="admin">
+    <h2>🔐 Admin: Submit Match Result</h2>
+    <input type="password" id="adminKey" placeholder="Enter admin code (292929)" />
 
-<!-- Admin Section -->
-<div id="admin-section">
-  <h2>🛠️ Update Match Result</h2>
-  <form id="match-form">
-    <label for="teamA">Team A</label>
-    <select id="teamA" name="teamA" required>
-      <option value="">Select Team A</option>
-    </select>
+    <div id="adminForm" style="display:none;">
+      <label for="teamA">Team A:</label>
+      <select id="teamA"></select>
 
-    <label for="scoreA">Score A</label>
-    <input type="number" id="scoreA" name="scoreA" min="0" required />
+      <label for="scoreA">Team A Score:</label>
+      <input type="number" id="scoreA" min="0" />
 
-    <label for="teamB">Team B</label>
-    <select id="teamB" name="teamB" required>
-      <option value="">Select Team B</option>
-    </select>
+      <label for="teamB">Team B:</label>
+      <select id="teamB"></select>
 
-    <label for="scoreB">Score B</label>
-    <input type="number" id="scoreB" name="scoreB" min="0" required />
+      <label for="scoreB">Team B Score:</label>
+      <input type="number" id="scoreB" min="0" />
 
-    <button type="submit">Submit Result</button>
-  </form>
-  <p id="form-msg" style="margin-top:10px;"></p>
-</div>
+      <button onclick="submitResult()">Submit Result</button>
+    </div>
+  </div>
 
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec"; // Replace with your deployed Apps Script URL
-  const PASSWORD = "292929";
+  <script>
+    const adminCode = "292929";
+    const apiURL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
 
-  const COLUMNS = ['Team', 'Group', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts'];
+    document.getElementById("adminKey").addEventListener("input", function () {
+      if (this.value === adminCode) {
+        document.getElementById("adminForm").style.display = "block";
+      } else {
+        document.getElementById("adminForm").style.display = "none";
+      }
+    });
 
-  const container = document.getElementById('tables-container');
-  const loginSection = document.getElementById('login-section');
-  const adminSection = document.getElementById('admin-section');
-  const loginBtn = document.getElementById('login-btn');
-  const loginMsg = document.getElementById('login-msg');
-  const form = document.getElementById('match-form');
-  const formMsg = document.getElementById('form-msg');
+    function loadTeams() {
+      // Update this URL to the JSON endpoint or set team list manually
+      const teams = [
+        "Ezaz", "Arnab", "Ayan", "Salman", "Surjo", "Mafid", "Rafiul", "Sezan",
+        "Uchas", "Shami", "Yamin", "Rohan", "Kakon", "Tusan", "Arman", "Iram"
+      ];
 
-  const teamASelect = document.getElementById('teamA');
-  const teamBSelect = document.getElementById('teamB');
-
-  async function fetchAndRender() {
-    container.innerHTML = "Loading data...";
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-
-      // Group by Group
-      const groups = {};
-      data.forEach(row => {
-        const group = row['Group'] || "Unknown";
-        if (!groups[group]) groups[group] = [];
-        groups[group].push(row);
-      });
-
-      container.innerHTML = "";
-      Object.keys(groups).sort().forEach(group => {
-        const groupDiv = document.createElement('div');
-        groupDiv.className = "group-table";
-
-        const table = document.createElement('table');
-        const caption = document.createElement('caption');
-        caption.textContent = `Group ${group}`;
-        table.appendChild(caption);
-
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        COLUMNS.forEach(col => {
-          const th = document.createElement('th');
-          th.textContent = col;
-          headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-
-        const tbody = document.createElement('tbody');
-        groups[group].forEach(row => {
-          const tr = document.createElement('tr');
-          COLUMNS.forEach(col => {
-            const td = document.createElement('td');
-            let val = row[col];
-            if (val === undefined) val = "";
-            if (col === 'GD' && val !== "" && !val.toString().startsWith('+') && Number(val) > 0) {
-              val = "+" + val;
-            }
-            td.textContent = val;
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-        groupDiv.appendChild(table);
-        container.appendChild(groupDiv);
-      });
-
-    } catch (error) {
-      container.innerHTML = "Error loading data: " + error.message;
-      console.error(error);
-    }
-  }
-
-  async function populateTeamDropdowns() {
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-
-      // Extract unique team names
-      const teams = [...new Set(data.map(row => row['Team']))].sort();
-
-      // Clear existing options except the placeholder
-      teamASelect.length = 1;
-      teamBSelect.length = 1;
+      const teamASelect = document.getElementById("teamA");
+      const teamBSelect = document.getElementById("teamB");
 
       teams.forEach(team => {
-        let optionA = document.createElement('option');
-        optionA.value = team;
-        optionA.textContent = team;
+        const optionA = document.createElement("option");
+        optionA.value = optionA.textContent = team;
         teamASelect.appendChild(optionA);
 
-        let optionB = document.createElement('option');
-        optionB.value = team;
-        optionB.textContent = team;
+        const optionB = document.createElement("option");
+        optionB.value = optionB.textContent = team;
         teamBSelect.appendChild(optionB);
       });
-    } catch (error) {
-      console.error("Error loading team names:", error);
-    }
-  }
-
-  loginBtn.onclick = () => {
-    const inputPass = document.getElementById('admin-password').value.trim();
-    if (inputPass === PASSWORD) {
-      loginMsg.textContent = "";
-      loginSection.style.display = "none";
-      adminSection.style.display = "block";
-    } else {
-      loginMsg.textContent = "Incorrect password!";
-    }
-  };
-
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-    formMsg.style.color = "black";
-    formMsg.textContent = "Submitting...";
-
-    const teamA = form.teamA.value.trim();
-    const teamB = form.teamB.value.trim();
-    const scoreA = form.scoreA.value.trim();
-    const scoreB = form.scoreB.value.trim();
-
-    if (!teamA || !teamB || scoreA === "" || scoreB === "") {
-      formMsg.style.color = "red";
-      formMsg.textContent = "Please fill all fields.";
-      return;
     }
 
-    if (teamA === teamB) {
-      formMsg.style.color = "red";
-      formMsg.textContent = "Team A and Team B cannot be the same.";
-      return;
-    }
+    function submitResult() {
+      const teamA = document.getElementById("teamA").value;
+      const teamB = document.getElementById("teamB").value;
+      const scoreA = document.getElementById("scoreA").value;
+      const scoreB = document.getElementById("scoreB").value;
 
-    const payload = { teamA, teamB, scoreA, scoreB };
-
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" }
-      });
-      const text = await response.text();
-
-      if (response.ok) {
-        formMsg.style.color = "green";
-        formMsg.textContent = "✅ Match result updated successfully!";
-        form.reset();
-        fetchAndRender();
-        populateTeamDropdowns();
-      } else {
-        formMsg.style.color = "red";
-        formMsg.textContent = "Error: " + text;
+      if (!teamA || !teamB || scoreA === "" || scoreB === "") {
+        alert("Please fill all fields.");
+        return;
       }
-    } catch (err) {
-      formMsg.style.color = "red";
-      formMsg.textContent = "Network error: " + err.message;
+
+      if (teamA === teamB) {
+        alert("Teams cannot be the same.");
+        return;
+      }
+
+      fetch(apiURL, {
+        method: "POST",
+        body: JSON.stringify({ teamA, teamB, scoreA, scoreB }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert("✅ Result submitted!");
+          location.reload(); // Refresh to show updated table
+        })
+        .catch(error => {
+          console.error("Network error:", error);
+          alert("❌ Failed to submit result.");
+        });
     }
-  };
 
-  // Initial load
-  fetchAndRender();
-  populateTeamDropdowns();
-
-  // Refresh every 5 minutes
-  setInterval(fetchAndRender, 300000);
-  setInterval(populateTeamDropdowns, 300000);
-</script>
-
+    loadTeams();
+  </script>
 </body>
 </html>
