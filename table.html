@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>⚽ E-Football Points Table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f0f2f5;
       margin: 0;
       padding: 20px;
@@ -14,110 +14,133 @@
     h1 {
       text-align: center;
       color: #333;
+      margin-bottom: 30px;
     }
     .group-table {
-      background: #fff;
+      max-width: 900px;
+      margin: 20px auto;
+      background: white;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 15px;
-      margin: 30px auto;
-      max-width: 1000px;
+      padding: 20px;
     }
     .group-table h2 {
-      background: #007bff;
+      background-color: #007bff;
       color: white;
+      margin: -20px -20px 15px -20px;
       padding: 10px;
-      margin: -15px -15px 15px -15px;
       border-top-left-radius: 12px;
       border-top-right-radius: 12px;
-      font-size: 1.2em;
+      font-size: 1.3rem;
       text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-    }
-    th {
-      background: #f8f9fa;
-      color: #333;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: center;
       font-size: 14px;
     }
-    .error {
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #e9ecef;
+    }
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    #errorMsg {
       color: red;
       text-align: center;
       font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>📊 E-Football Group Point Tables</h1>
+  <h1>📊 E-Football Group Points Table</h1>
   <div id="tables"></div>
-  <div class="error" id="errorMsg"></div>
+  <div id="errorMsg"></div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
 
     async function loadPoints() {
-      try {
-        const res = await fetch(SCRIPT_URL);
-        const data = await res.json();
+      const container = document.getElementById('tables');
+      const errorMsg = document.getElementById('errorMsg');
+      container.innerHTML = "⏳ Loading points...";
+      errorMsg.textContent = "";
 
-        const container = document.getElementById("tables");
+      try {
+        const response = await fetch(SCRIPT_URL);
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const data = await response.json();
+
         container.innerHTML = "";
 
         for (const group in data) {
-          const groupData = data[group];
+          const teams = data[group];
 
-          const tableHTML = `
-            <div class="group-table">
-              <h2>🅶 Group ${group}</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>P</th>
-                    <th>W</th>
-                    <th>D</th>
-                    <th>L</th>
-                    <th>GF</th>
-                    <th>GA</th>
-                    <th>GD</th>
-                    <th>Pts</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${groupData.map(row => `
-                    <tr>
-                      <td>${row.Team}</td>
-                      <td>${row.P}</td>
-                      <td>${row.W}</td>
-                      <td>${row.D}</td>
-                      <td>${row.L}</td>
-                      <td>${row.GF}</td>
-                      <td>${row.GA}</td>
-                      <td>${row.GD}</td>
-                      <td>${row.Pts}</td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>
-            </div>
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'group-table';
+
+          const groupTitle = document.createElement('h2');
+          groupTitle.textContent = `🅶 Group ${group}`;
+          groupDiv.appendChild(groupTitle);
+
+          const table = document.createElement('table');
+          const thead = document.createElement('thead');
+          thead.innerHTML = `
+            <tr>
+              <th>Team</th>
+              <th>P</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GF</th>
+              <th>GA</th>
+              <th>GD</th>
+              <th>Pts</th>
+            </tr>
           `;
-          container.innerHTML += tableHTML;
+          table.appendChild(thead);
+
+          const tbody = document.createElement('tbody');
+
+          teams.forEach(team => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${team.Team}</td>
+              <td>${team.P}</td>
+              <td>${team.W}</td>
+              <td>${team.D}</td>
+              <td>${team.L}</td>
+              <td>${team.GF}</td>
+              <td>${team.GA}</td>
+              <td>${team.GD}</td>
+              <td>${team.Pts}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          table.appendChild(tbody);
+          groupDiv.appendChild(table);
+
+          container.appendChild(groupDiv);
         }
-      } catch (err) {
-        console.error(err);
-        document.getElementById("errorMsg").innerText = "❌ Failed to load data.";
+
+      } catch (error) {
+        container.innerHTML = "";
+        errorMsg.textContent = "❌ Failed to load data.";
+        console.error("Error fetching points:", error);
       }
     }
 
     window.onload = loadPoints;
   </script>
+
 </body>
 </html>
