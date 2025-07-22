@@ -1,164 +1,167 @@
+<!-- index.html - Upload this to GitHub Pages or any web hosting -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⚽ E-Football Tournament</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
       padding: 20px;
     }
-    h2 {
-      color: #333;
+    h1, h2 {
+      text-align: center;
     }
     iframe {
       width: 100%;
       height: 400px;
       border: 1px solid #ccc;
-      margin-bottom: 30px;
+      border-radius: 10px;
     }
-    .admin {
+    .fixtures, .admin-panel {
       background: #fff;
       padding: 20px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      max-width: 400px;
+      margin: 20px auto;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    label, select, input {
-      display: block;
-      margin-bottom: 10px;
-      width: 100%;
+    .admin-panel input, .admin-panel select {
+      padding: 10px;
+      margin: 5px;
+      width: calc(100% - 22px);
     }
     button {
-      padding: 10px;
-      background: #28a745;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    .fixtures {
-      background: #fff;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin-top: 30px;
+      padding: 10px 15px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h2>📊 Group A Table</h2>
-  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=0&single=true&widget=true&headers=false"></iframe>
+  <h1>⚽ E-Football Tournament</h1>
 
-  <h2>📊 Group B Table</h2>
-  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=123456789&single=true&widget=true&headers=false"></iframe>
+  <h2>📊 Live Group Stage Point Table</h2>
+  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
 
   <div class="fixtures">
-    <h2>📅 Fixtures</h2>
-    <p>🗓️ <strong>Day 1</strong><br/>
-      🅰️ Ezaz 🆚 Arnab<br/>
-      🅱️ Surjo 🆚 Mafid<br/>
-      🆎 Uchas 🆚 Shami<br/>
-      🆑 Kakon 🆚 Tusan
-    </p>
-    <p>🗓️ <strong>Day 2</strong><br/>
-      🅰️ Ezaz 🆚 Ayan<br/>
-      🅱️ Rafiul 🆚 Sezan<br/>
-      🆎 Yamin 🆚 Rohan<br/>
-      🆑 Arman 🆚 Iram
-    </p>
+    <h2>🗓️ Fixtures</h2>
+    <pre>
+⭕ Day 1
+🅰️ Group A
+Ezaz 🔚 Arnab
+Ayan 🔚 Salman
+
+🅱️ Group B
+Surjo 🔚 Mafid
+Rafiul 🔚 Sezan
+
+🆎 Group C
+Uchas 🔚 Shami
+Yamin 🔚 Rohan
+
+🌋 Group D
+Kakon 🔚 Tusan
+Arman 🔚 Iram
+
+⭕ Day 2
+🅰️ Group A
+Ezaz 🔚 Ayan
+Arnab 🔚 Salman
+
+🅱️ Group B
+Surjo 🔚 Rafiul
+Mafid 🔚 Sezan
+
+🆎 Group C
+Uchas 🔚 Yamin
+Shami 🔚 Rohan
+
+🌋 Group D
+Kakon 🔚 Arman
+Tusan 🔚 Iram
+
+⭕ Day 3
+🅰️ Group A
+Ezaz 🔚 Salman
+Arnab 🔚 Ayan
+
+🅱️ Group B
+Surjo 🔚 Sezan
+Mafid 🔚 Rafiul
+
+🆎 Group C
+Uchas 🔚 Rohan
+Shami 🔚 Yamin
+
+🌋 Group D
+Kakon 🔚 Iram
+Tusan 🔚 Arman
+    </pre>
   </div>
 
-  <div class="admin">
-    <h2>🔐 Admin: Submit Match Result</h2>
-    <input type="password" id="adminKey" placeholder="Enter admin code (292929)" />
-
+  <div class="admin-panel">
+    <h2>👨‍💼 Admin Panel</h2>
+    <input type="password" id="adminPass" placeholder="Enter Admin PIN">
     <div id="adminForm" style="display:none;">
-      <label for="teamA">Team A:</label>
-      <select id="teamA"></select>
-
-      <label for="scoreA">Team A Score:</label>
-      <input type="number" id="scoreA" min="0" />
-
-      <label for="teamB">Team B:</label>
-      <select id="teamB"></select>
-
-      <label for="scoreB">Team B Score:</label>
-      <input type="number" id="scoreB" min="0" />
-
+      <select id="teamA">
+        <option value="">-- Select Team A --</option>
+        <option>Ezaz</option><option>Arnab</option><option>Ayan</option><option>Salman</option>
+        <option>Surjo</option><option>Mafid</option><option>Rafiul</option><option>Sezan</option>
+        <option>Uchas</option><option>Shami</option><option>Yamin</option><option>Rohan</option>
+        <option>Kakon</option><option>Tusan</option><option>Arman</option><option>Iram</option>
+      </select>
+      <input type="number" id="scoreA" placeholder="Score A">
+      <select id="teamB">
+        <option value="">-- Select Team B --</option>
+        <option>Ezaz</option><option>Arnab</option><option>Ayan</option><option>Salman</option>
+        <option>Surjo</option><option>Mafid</option><option>Rafiul</option><option>Sezan</option>
+        <option>Uchas</option><option>Shami</option><option>Yamin</option><option>Rohan</option>
+        <option>Kakon</option><option>Tusan</option><option>Arman</option><option>Iram</option>
+      </select>
+      <input type="number" id="scoreB" placeholder="Score B">
       <button onclick="submitResult()">Submit Result</button>
     </div>
+    <p id="message"></p>
   </div>
 
   <script>
-    const adminCode = "292929";
-    const apiURL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
 
-    document.getElementById("adminKey").addEventListener("input", function () {
-      if (this.value === adminCode) {
+    document.getElementById("adminPass").addEventListener("input", function() {
+      if (this.value === "292929") {
         document.getElementById("adminForm").style.display = "block";
       } else {
         document.getElementById("adminForm").style.display = "none";
       }
     });
 
-    function loadTeams() {
-      // Update this URL to the JSON endpoint or set team list manually
-      const teams = [
-        "Ezaz", "Arnab", "Ayan", "Salman", "Surjo", "Mafid", "Rafiul", "Sezan",
-        "Uchas", "Shami", "Yamin", "Rohan", "Kakon", "Tusan", "Arman", "Iram"
-      ];
-
-      const teamASelect = document.getElementById("teamA");
-      const teamBSelect = document.getElementById("teamB");
-
-      teams.forEach(team => {
-        const optionA = document.createElement("option");
-        optionA.value = optionA.textContent = team;
-        teamASelect.appendChild(optionA);
-
-        const optionB = document.createElement("option");
-        optionB.value = optionB.textContent = team;
-        teamBSelect.appendChild(optionB);
-      });
-    }
-
     function submitResult() {
       const teamA = document.getElementById("teamA").value;
       const teamB = document.getElementById("teamB").value;
-      const scoreA = document.getElementById("scoreA").value;
-      const scoreB = document.getElementById("scoreB").value;
+      const scoreA = parseInt(document.getElementById("scoreA").value);
+      const scoreB = parseInt(document.getElementById("scoreB").value);
 
-      if (!teamA || !teamB || scoreA === "" || scoreB === "") {
-        alert("Please fill all fields.");
+      if (!teamA || !teamB || isNaN(scoreA) || isNaN(scoreB)) {
+        alert("Please fill all fields correctly.");
         return;
       }
 
-      if (teamA === teamB) {
-        alert("Teams cannot be the same.");
-        return;
-      }
-
-      fetch(apiURL, {
+      fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({ teamA, teamB, scoreA, scoreB }),
-        headers: {
-          "Content-Type": "application/json"
-        }
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teamA, scoreA, teamB, scoreB })
       })
-        .then(response => response.json())
-        .then(data => {
-          alert("✅ Result submitted!");
-          location.reload(); // Refresh to show updated table
-        })
-        .catch(error => {
-          console.error("Network error:", error);
-          alert("❌ Failed to submit result.");
-        });
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("message").innerText = "✅ Match result submitted.";
+      })
+      .catch(err => {
+        document.getElementById("message").innerText = "❌ Failed to submit: " + err.message;
+      });
     }
-
-    loadTeams();
   </script>
 </body>
 </html>
