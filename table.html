@@ -1,152 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>⚽ E-Football Tournament</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9fafb;
-      padding: 20px;
-      color: #222;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1, h2 {
-      color: #2a9df4;
-      margin-bottom: 15px;
-    }
-    iframe {
-      width: 100%;
-      height: 450px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      margin-bottom: 40px;
-    }
-    .fixtures {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 40px;
-    }
-    .day {
-      margin-bottom: 30px;
-    }
-    .group {
-      margin-bottom: 20px;
-    }
-    .group-title {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-    .match {
-      font-size: 1rem;
-      margin-left: 15px;
-      margin-bottom: 6px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>⚽ E-Football Tournament - Live Points & Admin</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9fafb;
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    color: #222;
+  }
+  h1, h2 {
+    color: #2a9df4;
+    margin-bottom: 20px;
+  }
+  .group-table {
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background-color: #2a9df4;
+    color: white;
+  }
+  caption {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1e65c9;
+  }
+  #admin-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+    display: none;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  input[type="text"], input[type="number"], input[type="password"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    background-color: #2a9df4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  button:hover {
+    background-color: #1e65c9;
+  }
+  #login-section {
+    margin-bottom: 40px;
+  }
+  #login-section input {
+    max-width: 200px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+</style>
 </head>
 <body>
 
-  <h1>⚽ E-Football Tournament</h1>
+<h1>⚽ E-Football Tournament - Live Group Stage Points</h1>
 
-  <h2>📊 Group Stage Point Table (Live)</h2>
-  <iframe 
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQB4css0LHNZEH02H87kgwf3VkheJtYgvqMtw7C0bcGTDZ_Z4LWH4bmXhZ4C7MguGSwYuofvjQOsgyN/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false" 
-    frameborder="0" 
-    scrolling="no">
-  </iframe>
+<div id="tables-container">
+  Loading data...
+</div>
 
-  <div class="fixtures">
-    <h2>🗓️ Fixtures</h2>
+<!-- Admin Login -->
+<div id="login-section">
+  <label for="admin-password"><strong>Admin Password:</strong></label>
+  <input type="password" id="admin-password" placeholder="Enter password" />
+  <button id="login-btn">Login as Admin</button>
+  <p id="login-msg" style="color:red; margin-top:8px;"></p>
+</div>
 
-    <div class="day">
-      <h3>🗓️ Day 1</h3>
-      
-      <div class="group">
-        <div class="group-title">🅰️ Group A</div>
-        <div class="match">Ezaz 🆚 Arnab</div>
-        <div class="match">Ayan 🆚 Salman</div>
-      </div>
+<!-- Admin Section -->
+<div id="admin-section">
+  <h2>🛠️ Update Match Result</h2>
+  <form id="match-form">
+    <label for="teamA">Team A</label>
+    <input type="text" id="teamA" name="teamA" required />
 
-      <div class="group">
-        <div class="group-title">🅱️ Group B</div>
-        <div class="match">Surjo 🆚 Mafid</div>
-        <div class="match">Rafiul 🆚 Sezan</div>
-      </div>
+    <label for="teamB">Team B</label>
+    <input type="text" id="teamB" name="teamB" required />
 
-      <div class="group">
-        <div class="group-title">🆎 Group C</div>
-        <div class="match">Uchas 🆚 Shami</div>
-        <div class="match">Yamin 🆚 Rohan</div>
-      </div>
+    <label for="scoreA">Score A</label>
+    <input type="number" id="scoreA" name="scoreA" min="0" required />
 
-      <div class="group">
-        <div class="group-title">🆑 Group D</div>
-        <div class="match">Kakon 🆚 Tusan</div>
-        <div class="match">Arman 🆚 Iram</div>
-      </div>
-    </div>
+    <label for="scoreB">Score B</label>
+    <input type="number" id="scoreB" name="scoreB" min="0" required />
 
-    <div class="day">
-      <h3>🗓️ Day 2</h3>
-      
-      <div class="group">
-        <div class="group-title">🅰️ Group A</div>
-        <div class="match">Ezaz 🆚 Ayan</div>
-        <div class="match">Arnab 🆚 Salman</div>
-      </div>
+    <button type="submit">Submit Result</button>
+  </form>
+  <p id="form-msg" style="margin-top:10px;"></p>
+</div>
 
-      <div class="group">
-        <div class="group-title">🅱️ Group B</div>
-        <div class="match">Surjo 🆚 Rafiul</div>
-        <div class="match">Mafid 🆚 Sezan</div>
-      </div>
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbxoHbWCCZNNVigZom-cMny_6oDJ2G8f-WC1ldGYuv71bCW9gTuxMB7nvd0W95UBkmVq/exec"; // Replace with your script URL
+  const PASSWORD = "292929";
 
-      <div class="group">
-        <div class="group-title">🆎 Group C</div>
-        <div class="match">Uchas 🆚 Yamin</div>
-        <div class="match">Shami 🆚 Rohan</div>
-      </div>
+  const COLUMNS = ['Team', 'Group', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts'];
 
-      <div class="group">
-        <div class="group-title">🆑 Group D</div>
-        <div class="match">Kakon 🆚 Arman</div>
-        <div class="match">Tusan 🆚 Iram</div>
-      </div>
-    </div>
+  const container = document.getElementById('tables-container');
+  const loginSection = document.getElementById('login-section');
+  const adminSection = document.getElementById('admin-section');
+  const loginBtn = document.getElementById('login-btn');
+  const loginMsg = document.getElementById('login-msg');
+  const form = document.getElementById('match-form');
+  const formMsg = document.getElementById('form-msg');
 
-    <div class="day">
-      <h3>🗓️ Day 3</h3>
-      
-      <div class="group">
-        <div class="group-title">🅰️ Group A</div>
-        <div class="match">Ezaz 🆚 Salman</div>
-        <div class="match">Arnab 🆚 Ayan</div>
-      </div>
+  // Fetch and render group tables
+  async function fetchAndRender() {
+    container.innerHTML = "Loading data...";
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
 
-      <div class="group">
-        <div class="group-title">🅱️ Group B</div>
-        <div class="match">Surjo 🆚 Sezan</div>
-        <div class="match">Mafid 🆚 Rafiul</div>
-      </div>
+      // Group by Group field
+      const groups = {};
+      data.forEach(row => {
+        const group = row['Group'] || "Unknown";
+        if (!groups[group]) groups[group] = [];
+        groups[group].push(row);
+      });
 
-      <div class="group">
-        <div class="group-title">🆎 Group C</div>
-        <div class="match">Uchas 🆚 Rohan</div>
-        <div class="match">Shami 🆚 Yamin</div>
-      </div>
+      container.innerHTML = "";
+      Object.keys(groups).sort().forEach(group => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = "group-table";
 
-      <div class="group">
-        <div class="group-title">🆑 Group D</div>
-        <div class="match">Kakon 🆚 Iram</div>
-        <div class="match">Tusan 🆚 Arman</div>
-      </div>
-    </div>
-  </div>
+        const table = document.createElement('table');
+        const caption = document.createElement('caption');
+        caption.textContent = `Group ${group}`;
+        table.appendChild(caption);
+
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        COLUMNS.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        groups[group].forEach(row => {
+          const tr = document.createElement('tr');
+          COLUMNS.forEach(col => {
+            const td = document.createElement('td');
+            let val = row[col];
+            if (val === undefined) val = "";
+            if (col === 'GD' && val !== "" && !val.toString().startsWith('+') && Number(val) > 0) {
+              val = "+" + val;
+            }
+            td.textContent = val;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        groupDiv.appendChild(table);
+        container.appendChild(groupDiv);
+      });
+
+    } catch (error) {
+      container.innerHTML = "Error loading data: " + error.message;
+      console.error(error);
+    }
+  }
+
+  // Login handler
+  loginBtn.onclick = () => {
+    const inputPass = document.getElementById('admin-password').value.trim();
+    if (inputPass === PASSWORD) {
+      loginMsg.textContent = "";
+      loginSection.style.display = "none";
+      adminSection.style.display = "block";
+    } else {
+      loginMsg.textContent = "Incorrect password!";
+    }
+  };
+
+  // Submit match result
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    formMsg.style.color = "black";
+    formMsg.textContent = "Submitting...";
+
+    const teamA = form.teamA.value.trim();
+    const teamB = form.teamB.value.trim();
+    const scoreA = form.scoreA.value.trim();
+    const scoreB = form.scoreB.value.trim();
+
+    if (!teamA || !teamB || scoreA === "" || scoreB === "") {
+      formMsg.style.color = "red";
+      formMsg.textContent = "Please fill all fields.";
+      return;
+    }
+
+    // Prepare POST payload
+    const payload = {
+      teamA,
+      teamB,
+      scoreA,
+      scoreB
+    };
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      const text = await response.text();
+
+      if (response.ok) {
+        formMsg.style.color = "green";
+        formMsg.textContent = "✅ Match result updated successfully!";
+        form.reset();
+        // Refresh tables
+        fetchAndRender();
+      } else {
+        formMsg.style.color = "red";
+        formMsg.textContent = "Error: " + text;
+      }
+    } catch (err) {
+      formMsg.style.color = "red";
+      formMsg.textContent = "Network error: " + err.message;
+    }
+  };
+
+  // Initial data load
+  fetchAndRender();
+
+  // Auto refresh every 5 minutes
+  setInterval(fetchAndRender, 300000);
+</script>
 
 </body>
 </html>
