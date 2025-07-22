@@ -2,136 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>⚽ E‑Football Tournament Live</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Football Tournament 🏆</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin:0; padding:10px; }
-    .container { max-width:600px; margin:auto; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); position:relative; overflow:hidden; }
-    .admin-toggle{position:absolute;top:10px;right:10px;background:#3498db;color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer;z-index:10;}
-    .header{background:linear-gradient(90deg,#1e3c72,#2a5298);padding:15px;color:#fff;text-align:center;}
-    .header h1{margin:0;font-size:20px;text-transform:uppercase;}
-    .header p{margin:5px 0 0;font-size:12px;}
-    .admin-section{display:none;padding:10px;background:#eef6fc;text-align:center;}
-    .admin-section input{width:70%;padding:6px;font-size:14px;border:1px solid #ccc;border-radius:4px;margin-bottom:5px;}
-    .admin-section button{width:25%;padding:6px;background:#3498db;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer;}
-    .form-section{display:none; padding:10px;flex-wrap:wrap; gap:5px;}
-    .form-section select, .form-section input{flex:1 1 48%;padding:6px;font-size:14px;border:1px solid #ccc;border-radius:4px;}
-    .form-section button{width:100%;padding:8px;background:#3498db;color:#fff;border:none;border-radius:5px;font-size:14px;cursor:pointer;}
-    .description{background:#eaf3fc;color:#2c3e50;padding:8px;text-align:center;font-size:12px;border-bottom:1px solid #ccc;}
-    table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px 0;}
-    th,td{padding:6px;border:1px solid #ddd;text-align:center;}
-    th{background:#2c3e50;color:#fff;font-size:13px;}
-    .last-matches, #fixtures {padding:10px; display:flex; flex-direction:column; gap:6px;}
-    .match-card{display:flex;justify-content:center;align-items:center;background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1);padding:6px 10px; font-size:12px; gap:8px;}
-    .match-team{width:80px;text-align:center;font-weight:500;}
-    .match-score{background:#95a5a6;color:#fff;border-radius:4px;padding:2px 8px;font-weight:bold;min-width:40px;text-align:center;}
-    .footer{text-align:center;font-size:10px;color:#777;padding:8px 0 10px;}
-    @media (max-width:480px){.admin-toggle{top:5px;right:5px;font-size:10px;padding:3px 6px;} .header h1{font-size:16px;} .form-section select,.form-section input{flex:1 1 100%;} th,td{font-size:11px;padding:4px;}}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .fixture-day {
+      background: #fff;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 700px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .group {
+      margin-top: 10px;
+      padding: 10px;
+      border-left: 4px solid #333;
+    }
+    .match {
+      padding-left: 20px;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      margin-top: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
-    <div class="header">
-      <h1>E‑Football Tournament 2025</h1>
-      <p>Live Group Tables & Fixtures</p>
+
+  <h1>⚽ E-Football Tournament</h1>
+  <h2>📊 Live Group Stage Point Table</h2>
+
+  <!-- Replace the iframe src with your actual public Google Sheet embed link -->
+  <iframe src="https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pubhtml?widget=true&amp;headers=false"></iframe>
+
+  <div class="fixture-day">
+    <h2>🗓️ Day 1</h2>
+
+    <div class="group">🅰️ Group A
+      <div class="match">Ezaz 🆚 Arnab</div>
+      <div class="match">Ayan 🆚 Salman</div>
     </div>
-
-    <div class="admin-section" id="adminSection">
-      <input type="password" id="adminCode" placeholder="Enter admin code">
-      <button onclick="checkAdmin()">OK</button>
+    <div class="group">🅱️ Group B
+      <div class="match">Surjo 🆚 Mafid</div>
+      <div class="match">Rafiul 🆚 Sezan</div>
     </div>
-
-    <div class="form-section" id="addForm">
-      <select id="teamA"><!-- auto-filled --></select>
-      <input type="number" id="scoreA" placeholder="Goals A">
-      <select id="teamB"><!-- auto-filled --></select>
-      <input type="number" id="scoreB" placeholder="Goals B">
-      <button onclick="addResult()">Add Result</button>
+    <div class="group">🆎 Group C
+      <div class="match">Uchas 🆚 Shami</div>
+      <div class="match">Yamin 🆚 Rohan</div>
     </div>
-
-    <div class="description">🏆 Group Standings</div>
-    <div id="groupTables"></div>
-
-    <div class="description">📅 Match Fixtures (Day-wise)</div>
-    <div id="fixtures"></div>
-
-    <div class="description">⚽ Last Results</div>
-    <div class="last-matches" id="lastMatches"></div>
-
-    <div class="footer">Built by Ezaz • Live-updates via Google Sheets</div>
+    <div class="group">🆑 Group D
+      <div class="match">Kakon 🆚 Tusan</div>
+      <div class="match">Arman 🆚 Iram</div>
+    </div>
   </div>
 
-<script>
-const API_URL = "YOUR_GOOGLE_SHEETS_SCRIPT_URL";
-const SECRET_CODE = "29292929";
+  <div class="fixture-day">
+    <h2>🗓️ Day 2</h2>
 
-const fixtures = {
-  "Day 1": {A:[["Ezaz","Arnab"],["Ayan","Salman"]],B:[["Surjo","Mafid"],["Rafiul","Sezan"]],C:[["Uchas","Shami"],["Yamin","Rohan"]],D:[["Kakon","Tusan"],["Arman","X"]]},
-  "Day 2": {A:[["Ezaz","Ayan"],["Arnab","Salman"]],B:[["Surjo","Rafiul"],["Mafid","Sezan"]],C:[["Uchas","Yamin"],["Shami","Rohan"]],D:[["Kakon","Arman"],["Tusan","X"]]},
-  "Day 3": {A:[["Ezaz","Salman"],["Arnab","Ayan"]],B:[["Surjo","Sezan"],["Mafid","Rafiul"]],C:[["Uchas","Rohan"],["Shami","Yamin"]],D:[["Kakon","X"],["Tusan","Arman"]]}
-};
+    <div class="group">🅰️ Group A
+      <div class="match">Ezaz 🆚 Ayan</div>
+      <div class="match">Arnab 🆚 Salman</div>
+    </div>
+    <div class="group">🅱️ Group B
+      <div class="match">Surjo 🆚 Rafiul</div>
+      <div class="match">Mafid 🆚 Sezan</div>
+    </div>
+    <div class="group">🆎 Group C
+      <div class="match">Uchas 🆚 Yamin</div>
+      <div class="match">Shami 🆚 Rohan</div>
+    </div>
+    <div class="group">🆑 Group D
+      <div class="match">Kakon 🆚 Arman</div>
+      <div class="match">Tusan 🆚 Iram</div>
+    </div>
+  </div>
 
-function toggleAdmin(){ let s=document.getElementById("adminSection"); s.style.display=s.style.display==="block"?"none":"block"; }
-function checkAdmin(){
-  if(document.getElementById("adminCode").value===SECRET_CODE){
-    document.getElementById("addForm").style.display="flex";
-    toggleAdmin();
-  } else alert("Wrong code!");
-}
+  <div class="fixture-day">
+    <h2>🗓️ Day 3</h2>
 
-async function loadGroupTables(){
-  let container=document.getElementById("groupTables");
-  container.innerHTML="";
-  let res=await fetch(API_URL+'?method=getTableAllGroups');
-  let groups=await res.json();
-  for(let g in groups){
-    let tbl=document.createElement("table");
-    tbl.innerHTML=`<caption><strong>Group ${g}</strong></caption><thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;
-    groups[g].forEach(r=>{ tbl.innerHTML+=`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[8]}</td></tr>`; });
-    tbl.innerHTML+="</tbody>";
-    container.appendChild(tbl);
-  }
-}
+    <div class="group">🅰️ Group A
+      <div class="match">Ezaz 🆚 Salman</div>
+      <div class="match">Arnab 🆚 Ayan</div>
+    </div>
+    <div class="group">🅱️ Group B
+      <div class="match">Surjo 🆚 Sezan</div>
+      <div class="match">Mafid 🆚 Rafiul</div>
+    </div>
+    <div class="group">🆎 Group C
+      <div class="match">Uchas 🆚 Rohan</div>
+      <div class="match">Shami 🆚 Yamin</div>
+    </div>
+    <div class="group">🆑 Group D
+      <div class="match">Kakon 🆚 Iram</div>
+      <div class="match">Tusan 🆚 Arman</div>
+    </div>
+  </div>
 
-function showFixtures(){
-  const container=document.getElementById("fixtures");
-  container.innerHTML="";
-  for(let day in fixtures){
-    container.innerHTML+=`<div class="match-card" style="font-weight:bold;">🗓️ ${day}</div>`;
-    for(let g in fixtures[day]){
-      container.innerHTML+=`<div class="match-card"><strong>Group ${g}:</strong></div>`;
-      fixtures[day][g].forEach(m=>{
-        container.innerHTML+=`<div class="match-card">${m[0]} vs ${m[1]}</div>`;
-      });
-    }
-  }
-}
-
-const lastMatches=["Ezaz 3‑1 Arnab","Surjo 2‑0 Mafid"];
-
-function showLast(){
-  let c=document.getElementById("lastMatches");
-  c.innerHTML="";
-  lastMatches.slice(0,5).forEach(m=>{
-    let [t1,s1,s2,t2]=m.split(' ');
-    c.innerHTML+=`<div class="match-card"><div class="match-team">${t1}</div><div class="match-score">${s1}‑${s2}</div><div class="match-team">${t2}</div></div>`;
-  });
-}
-
-async function addResult(){
-  let a=document.getElementById("teamA").value,b=document.getElementById("teamB").value;
-  let gA=+document.getElementById("scoreA").value,gB=+document.getElementById("scoreB").value;
-  if(a===b||isNaN(gA)||isNaN(gB)) return alert("Invalid!");
-  await fetch(API_URL+`?method=addResult&a=${a}&gA=${gA}&b=${b}&gB=${gB}`);
-  lastMatches.unshift(`${a} ${gA}-${gB} ${b}`);
-  loadGroupTables(); showLast();
-}
-
-window.onload=()=>{
-  loadGroupTables(); showFixtures(); showLast();
-};
-</script>
 </body>
 </html>
