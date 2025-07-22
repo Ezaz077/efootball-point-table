@@ -1,146 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>⚽ E-Football Points Table</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 30px;
-    }
-    .group-table {
-      max-width: 900px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-    }
-    .group-table h2 {
-      background-color: #007bff;
-      color: white;
-      margin: -20px -20px 15px -20px;
-      padding: 10px;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-      font-size: 1.3rem;
-      text-align: center;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #e9ecef;
-    }
-    tr:nth-child(even) {
-      background-color: #f8f9fa;
-    }
-    #errorMsg {
-      color: red;
-      text-align: center;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>⚽ E-Football Points Table</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 0; padding: 20px;
+  }
+  h1 {
+    text-align: center; color: #333; margin-bottom: 30px;
+  }
+  .group-table {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  .group-table h2 {
+    background-color: #007bff;
+    color: white;
+    margin: -20px -20px 15px -20px;
+    padding: 10px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    font-size: 1.3rem;
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  th {
+    background-color: #e9ecef;
+  }
+  tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  #errorMsg {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+</style>
 </head>
 <body>
 
-  <h1>📊 E-Football Group Points Table</h1>
-  <div id="tables"></div>
-  <div id="errorMsg"></div>
+<h1>📊 E-Football Group Points Table</h1>
+<div id="tables"></div>
+<div id="errorMsg"></div>
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
 
-    async function loadPoints() {
-      const container = document.getElementById('tables');
-      const errorMsg = document.getElementById('errorMsg');
-      container.innerHTML = "⏳ Loading points...";
-      errorMsg.textContent = "";
+  async function loadPoints() {
+    const container = document.getElementById('tables');
+    const errorMsg = document.getElementById('errorMsg');
+    container.innerHTML = "⏳ Loading points...";
+    errorMsg.textContent = "";
 
-      try {
-        const response = await fetch(SCRIPT_URL);
-        if (!response.ok) throw new Error("Network response was not ok");
+    try {
+      const response = await fetch(SCRIPT_URL, { mode: "cors" });
+      if (!response.ok) throw new Error("Network response was not ok");
 
-        const data = await response.json();
+      const data = await response.json();
 
-        container.innerHTML = "";
+      container.innerHTML = "";
 
-        for (const group in data) {
-          const teams = data[group];
+      for (const group in data) {
+        const teams = data[group];
 
-          const groupDiv = document.createElement('div');
-          groupDiv.className = 'group-table';
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'group-table';
 
-          const groupTitle = document.createElement('h2');
-          groupTitle.textContent = `🅶 Group ${group}`;
-          groupDiv.appendChild(groupTitle);
+        const groupTitle = document.createElement('h2');
+        groupTitle.textContent = `🅶 Group ${group}`;
+        groupDiv.appendChild(groupTitle);
 
-          const table = document.createElement('table');
-          const thead = document.createElement('thead');
-          thead.innerHTML = `
-            <tr>
-              <th>Team</th>
-              <th>P</th>
-              <th>W</th>
-              <th>D</th>
-              <th>L</th>
-              <th>GF</th>
-              <th>GA</th>
-              <th>GD</th>
-              <th>Pts</th>
-            </tr>
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+          <tr>
+            <th>Team</th>
+            <th>P</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+            <th>Pts</th>
+          </tr>
+        `;
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+
+        teams.forEach(team => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${team.Team}</td>
+            <td>${team.P}</td>
+            <td>${team.W}</td>
+            <td>${team.D}</td>
+            <td>${team.L}</td>
+            <td>${team.GF}</td>
+            <td>${team.GA}</td>
+            <td>${team.GD}</td>
+            <td>${team.Pts}</td>
           `;
-          table.appendChild(thead);
+          tbody.appendChild(tr);
+        });
 
-          const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+        groupDiv.appendChild(table);
 
-          teams.forEach(team => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${team.Team}</td>
-              <td>${team.P}</td>
-              <td>${team.W}</td>
-              <td>${team.D}</td>
-              <td>${team.L}</td>
-              <td>${team.GF}</td>
-              <td>${team.GA}</td>
-              <td>${team.GD}</td>
-              <td>${team.Pts}</td>
-            `;
-            tbody.appendChild(tr);
-          });
-
-          table.appendChild(tbody);
-          groupDiv.appendChild(table);
-
-          container.appendChild(groupDiv);
-        }
-
-      } catch (error) {
-        container.innerHTML = "";
-        errorMsg.textContent = "❌ Failed to load data.";
-        console.error("Error fetching points:", error);
+        container.appendChild(groupDiv);
       }
-    }
 
-    window.onload = loadPoints;
-  </script>
+    } catch (error) {
+      container.innerHTML = "";
+      errorMsg.textContent = "❌ Failed to load data.";
+      console.error("Error fetching points:", error);
+    }
+  }
+
+  window.onload = loadPoints;
+</script>
 
 </body>
 </html>
