@@ -1,164 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>⚽ E-Football Points Table</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    margin: 0; padding: 20px;
-  }
-  h1 {
-    text-align: center; color: #333; margin-bottom: 30px;
-  }
-  .group-table {
-    max-width: 900px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 20px;
-  }
-  .group-table h2 {
-    background-color: #007bff;
-    color: white;
-    margin: -20px -20px 15px -20px;
-    padding: 10px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    font-size: 1.3rem;
-    text-align: center;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
-  th {
-    background-color: #e9ecef;
-  }
-  tr:nth-child(even) {
-    background-color: #f8f9fa;
-  }
-  #errorMsg {
-    color: red;
-    text-align: center;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eFootball Club X Tournament</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #0d0d0d;
+      color: #cfd8dc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Loading Screen */
+    #loadingScreen {
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #0d0d0d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .loader-content p {
+      font-size: 1.4rem;
+      color: #33ccff;
+      font-weight: bold;
+      text-shadow: 0 0 8px #33ccff88;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    nav {
+      background-color: #121212;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #222;
+      color: #66d9ff;
+      flex-wrap: wrap;
+    }
+
+    .nav-left {
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: #66d9ff;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-right a {
+      font-weight: 500;
+      color: #66d9ff;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .nav-right a:hover {
+      color: #33ccff;
+      text-decoration: underline;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      width: 25px;
+      height: 20px;
+      justify-content: space-between;
+    }
+
+    .hamburger div {
+      height: 3px;
+      background-color: #66d9ff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 15px 10px;
+      color: #33ccff;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 900;
+    }
+
+    header p {
+      margin-top: 6px;
+      font-size: 1rem;
+      color: #a0d8ff;
+    }
+
+    .rules {
+      background-color: #121212;
+      max-width: 700px;
+      margin: 15px auto 30px;
+      padding: 20px 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #33ccff44;
+      color: #80d8ff;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    #tablesContainer {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      width: 95%;
+    }
+
+    .group-table h2 {
+      color: #33ccff;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 0 12px #33ccff55;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: center;
+      border-bottom: 1px solid #2c2c2c;
+    }
+
+    th {
+      background-color: #222;
+      font-weight: 600;
+      color: #80d8ff;
+    }
+
+    .fixtures {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      width: 95%;
+    }
+
+    .fixtures h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #33ccff;
+      margin-bottom: 25px;
+    }
+
+    .fixtures-day {
+      background-color: #1a1a1a;
+      margin-bottom: 30px;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #33ccff44;
+    }
+
+    .fixtures-day h3 {
+      color: #33ccff;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .match-group {
+      margin-bottom: 20px;
+    }
+
+    .group-title {
+      font-size: 1.1rem;
+      color: #ffa500;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .match {
+      display: flex;
+      justify-content: space-between;
+      background-color: #262626;
+      padding: 10px 15px;
+      margin: 6px 0;
+      border-radius: 8px;
+    }
+
+    .match span {
+      width: 40%;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .match span:nth-child(2) {
+      width: 20%;
+      color: #66d9ff;
+    }
+
+    @media (max-width: 760px) {
+      .nav-right {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+        padding-top: 10px;
+      }
+
+      .nav-right.show {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .match {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .match span {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div id="loadingScreen">
+    <div class="loader-content">
+      <p>Loading Tournament...</p>
+    </div>
+  </div>
 
-<h1>📊 E-Football Group Points Table</h1>
-<div id="tables"></div>
-<div id="errorMsg"></div>
+  <nav>
+    <div class="nav-left">eFootball Club X</div>
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="nav-right" id="navLinks">
+      <a href="#tablesContainer">Points Table</a>
+      <a href="#fixturesSection">Fixture</a>
+      <a href="https://www.facebook.com/MeetEzaz/" target="_blank">Admin Contact</a>
+    </div>
+  </nav>
 
-<script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww08i4GpfL0bdVxNJq1E-K0G0eGiiXk9iD6N_OkMe88LXZFGlvEIlkeH5NGe9edbk3/exec";
-  let cachedData = null;
+  <header>
+    <h1>eFootball Club X Tournament</h1>
+    <p>Welcome to the official eFootball Club X Tournament points and fixtures page.</p>
+  </header>
 
-  async function loadPoints() {
-    const container = document.getElementById('tables');
-    const errorMsg = document.getElementById('errorMsg');
-    container.innerHTML = "⏳ Loading points...";
-    errorMsg.textContent = "";
+  <section class="rules">
+    গ্রুপ স্টেজে প্রতি ম্যাচ ৮ মিনিট, অতিরিক্ত সময় বা পেনাল্টি নেই
+    কোয়ার্টার ফাইনাল থেকে অতিরিক্ত সময় ও পেনাল্টি খেলা হবে
+    এন্ট্রি ফি লাগবে না
 
-    try {
-      if (!cachedData) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 7000); // 7 sec timeout
+    পুরস্কার: ১ম - ৫০ টাকা, ২য় - ৩০ টাকা, ৩য় - ২০ টাকা
 
-        const response = await fetch(SCRIPT_URL, { mode: "cors", signal: controller.signal });
-        clearTimeout(timeoutId);
+    ম্যাচ সময়: বিকেল ৪টা থেকে রাত ১২টার মধ্যে
+    নেটওয়ার্ক ইস্যু হলে পুনরায় ম্যাচ হবে না
+    কেউ অনুপস্থিত থাকলে অ্যাক্টিভ প্লেয়ার ম্যাচ জয়ী হবে
+  </section>
 
-        if (!response.ok) throw new Error("Network response was not ok");
+  <div id="tablesContainer"></div>
 
-        cachedData = await response.json();
-      }
+  <section id="fixturesSection" class="fixtures">
+    <h2>Fixtures</h2>
 
-      const data = cachedData;
+    <!-- Day 1 -->
+    <div class="fixtures-day">
+      <h3>Day 1 - Group Stage</h3>
+      <div class="match-group"><div class="group-title">Group A</div>
+        <div class="match"><span>Ezaz</span><span>vs</span><span>Arnab</span></div>
+        <div class="match"><span>Ayan</span><span>vs</span><span>Salman</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group B</div>
+        <div class="match"><span>Surjo</span><span>vs</span><span>Mafid</span></div>
+        <div class="match"><span>Rafiul</span><span>vs</span><span>Sezan</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group C</div>
+        <div class="match"><span>Uchas</span><span>vs</span><span>Shami</span></div>
+        <div class="match"><span>Yamin</span><span>vs</span><span>Rohan</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group D</div>
+        <div class="match"><span>Kakon</span><span>vs</span><span>Tusan</span></div>
+        <div class="match"><span>Arman</span><span>vs</span><span>Iram</span></div>
+      </div>
+    </div>
 
-      // Group by 'Group' client-side
-      const grouped = data.reduce((acc, item) => {
-        const grp = item.Group || "Unknown";
-        if (!acc[grp]) acc[grp] = [];
-        acc[grp].push(item);
-        return acc;
-      }, {});
+    <!-- Day 2 -->
+    <div class="fixtures-day">
+      <h3>Day 2 - Group Stage</h3>
+      <div class="match-group"><div class="group-title">Group A</div>
+        <div class="match"><span>Ezaz</span><span>vs</span><span>Ayan</span></div>
+        <div class="match"><span>Arnab</span><span>vs</span><span>Salman</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group B</div>
+        <div class="match"><span>Surjo</span><span>vs</span><span>Rafiul</span></div>
+        <div class="match"><span>Mafid</span><span>vs</span><span>Sezan</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group C</div>
+        <div class="match"><span>Uchas</span><span>vs</span><span>Yamin</span></div>
+        <div class="match"><span>Shami</span><span>vs</span><span>Rohan</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group D</div>
+        <div class="match"><span>Kakon</span><span>vs</span><span>Arman</span></div>
+        <div class="match"><span>Tusan</span><span>vs</span><span>Iram</span></div>
+      </div>
+    </div>
 
-      container.innerHTML = "";
+    <!-- Day 3 -->
+    <div class="fixtures-day">
+      <h3>Day 3 - Group Stage</h3>
+      <div class="match-group"><div class="group-title">Group A</div>
+        <div class="match"><span>Ezaz</span><span>vs</span><span>Salman</span></div>
+        <div class="match"><span>Arnab</span><span>vs</span><span>Ayan</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group B</div>
+        <div class="match"><span>Surjo</span><span>vs</span><span>Sezan</span></div>
+        <div class="match"><span>Mafid</span><span>vs</span><span>Rafiul</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group C</div>
+        <div class="match"><span>Uchas</span><span>vs</span><span>Rohan</span></div>
+        <div class="match"><span>Shami</span><span>vs</span><span>Yamin</span></div>
+      </div>
+      <div class="match-group"><div class="group-title">Group D</div>
+        <div class="match"><span>Kakon</span><span>vs</span><span>Iram</span></div>
+        <div class="match"><span>Tusan</span><span>vs</span><span>Arman</span></div>
+      </div>
+    </div>
 
-      for (const group in grouped) {
-        const teams = grouped[group];
+    <!-- Knockout -->
+    <div class="fixtures-day">
+  <h3>Quarter Finals</h3>
+  <div class="match"><span>QF1:</span><span>Group A Winner</span><span>vs</span><span>Group B Runner-up</span></div>
+  <div class="match"><span>QF2:</span><span>Group C Winner</span><span>vs</span><span>Group D Runner-up</span></div>
+  <div class="match"><span>QF3:</span><span>Group B Winner</span><span>vs</span><span>Group A Runner-up</span></div>
+  <div class="match"><span>QF4:</span><span>Group D Winner</span><span>vs</span><span>Group C Runner-up</span></div>
+</div>
 
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'group-table';
 
-        const groupTitle = document.createElement('h2');
-        groupTitle.textContent = `🅶 Group ${group}`;
-        groupDiv.appendChild(groupTitle);
+    <div class="fixtures-day">
+      <h3>Semi Finals</h3>
+      <div class="match"><span>QF1 Winner</span><span>vs</span><span>QF2 Winner</span></div>
+      <div class="match"><span>QF3 Winner</span><span>vs</span><span>QF4 Winner</span></div>
+    </div>
 
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
-          <tr>
-            <th>Team</th>
-            <th>P</th>
-            <th>W</th>
-            <th>D</th>
-            <th>L</th>
-            <th>GF</th>
-            <th>GA</th>
-            <th>GD</th>
-            <th>Pts</th>
-          </tr>
-        `;
-        table.appendChild(thead);
+    <div class="fixtures-day">
+      <h3>Final</h3>
+      <div class="match"><span>SF1 Winner</span><span>vs</span><span>SF2 Winner</span></div>
+    </div>
+  </section>
 
-        const tbody = document.createElement('tbody');
+  <script>
+    // Hamburger toggle
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('show');
+    });
 
-        teams.forEach(team => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${team.Team}</td>
-            <td>${team.P}</td>
-            <td>${team.W}</td>
-            <td>${team.D}</td>
-            <td>${team.L}</td>
-            <td>${team.GF}</td>
-            <td>${team.GA}</td>
-            <td>${team.GD}</td>
-            <td>${team.Pts}</td>
-          `;
-          tbody.appendChild(tr);
+    // Loading screen
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('loadingScreen');
+        if (loader) loader.style.display = 'none';
+      }, 5000);
+    });
+
+    // Fetch points table
+    async function fetchPointsData() {
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbw9WuTrKEU3C98_VHSji3KJXtV8Wu26Kq-z5z80pVga01IHcq6Nfs5m0gM4bzfYuCZc/exec');
+        const data = await response.json();
+
+        const groupedData = {};
+        data.forEach(team => {
+          const group = team.group;
+          if (!groupedData[group]) groupedData[group] = [];
+          groupedData[group].push(team);
         });
 
-        table.appendChild(tbody);
-        groupDiv.appendChild(table);
-        container.appendChild(groupDiv);
-      }
+        for (let group in groupedData) {
+          groupedData[group].sort((a, b) => {
+            if (b.Pts === a.Pts) return b.GD - a.GD;
+            return b.Pts - a.Pts;
+          });
+        }
 
-    } catch (error) {
-      container.innerHTML = "";
-      if (error.name === 'AbortError') {
-        errorMsg.textContent = "⏳ Loading timed out. Please try again.";
-      } else {
-        errorMsg.textContent = "❌ Failed to load data.";
+        const container = document.getElementById('tablesContainer');
+        container.innerHTML = '';
+
+        const groupOrder = ['A', 'B', 'C', 'D'];
+        groupOrder.forEach(group => {
+          if (groupedData[group]) {
+            const teams = groupedData[group];
+            const section = document.createElement('div');
+            section.className = 'group-table';
+            section.innerHTML = `
+              <h2>Group ${group}</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${teams.map(t => `
+                    <tr><td>${t.team}</td><td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
+                    <td>${t.GF}</td><td>${t.GA}</td><td>${t.GD}</td><td>${t.Pts}</td></tr>`).join('')}
+                </tbody>
+              </table>`;
+            container.appendChild(section);
+          }
+        });
+      } catch (error) {
+        document.getElementById('tablesContainer').innerHTML =
+          '<p style="text-align:center; color:#ff6666;">Failed to load points data.</p>';
       }
-      console.error("Error fetching points:", error);
     }
-  }
 
-  window.onload = loadPoints;
-</script>
-
+    document.addEventListener('DOMContentLoaded', fetchPointsData);
+  </script>
 </body>
 </html>
